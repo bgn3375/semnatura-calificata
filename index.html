@@ -322,7 +322,7 @@ a { color: inherit; }
 .edit-bar {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
   background: var(--c-dark); color: rgba(255,255,255,0.7); padding: 10px 24px;
-  display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 12.5px;
+  display: none; align-items: center; justify-content: center; gap: 16px; font-size: 12.5px;
 }
 .edit-bar svg { width: 14px; height: 14px; color: var(--c-accent); }
 .eb-btn { background: var(--c-accent); color: #fff; border: none; padding: 6px 14px; border-radius: var(--r-pill); font-size: 12px; font-weight: 500; cursor: pointer; }
@@ -593,8 +593,10 @@ a { color: inherit; }
 <div class="toast" id="toast"></div>
 
 <script>
-// Editable
+// Editable (local dev only — hidden on live site)
 (function(){
+  if(location.hostname!=='localhost'&&location.hostname!=='127.0.0.1')return;
+  document.querySelector('.edit-bar').style.display='flex';
   const sel='h1,h2,h3,p,.lead,.marker,.hero-trust span,.trust-item,.chk span,.uc-card h3,.uc-card p,.uc-tag,.step h3,.step p,.price-big,.price-sub,.pf,.pricing-right h3,.faq-a-inner,.faq-left p,.cta-price,.footer-tagline,.footer-cred,.footer-col a,.footer-col h4';
   document.querySelectorAll(sel).forEach(el=>{if(!el.closest('.edit-bar')&&!el.closest('script')){el.setAttribute('contenteditable','true');}});
   document.querySelectorAll('.faq-q span').forEach(s=>s.setAttribute('contenteditable','true'));
