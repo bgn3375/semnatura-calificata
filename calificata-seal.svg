@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-label="calificata.ro">
+  <defs>
+    <linearGradient id="cf_seal" x1="14%" y1="10%" x2="88%" y2="92%">
+      <stop offset="0%" stop-color="#4A26F4"></stop>
+      <stop offset="100%" stop-color="#1340FF"></stop>
+    </linearGradient>
+  </defs>
+  <path fill="url(#cf_seal)" d="M110.00 10.00 C121.35 10.00 132.27 22.89 144.06 27.77 C155.84 32.66 172.68 31.26 180.71 39.29 C188.74 47.32 187.34 64.16 192.23 75.94 C197.11 87.73 210.00 98.65 210.00 110.00 C210.00 121.35 197.11 132.27 192.23 144.06 C187.34 155.84 188.74 172.68 180.71 180.71 C172.68 188.74 155.84 187.34 144.06 192.23 C132.27 197.11 121.35 210.00 110.00 210.00 C98.65 210.00 87.73 197.11 75.94 192.23 C64.16 187.34 47.32 188.74 39.29 180.71 C31.26 172.68 32.66 155.84 27.77 144.06 C22.89 132.27 10.00 121.35 10.00 110.00 C10.00 98.65 22.89 87.73 27.77 75.94 C32.66 64.16 31.26 47.32 39.29 39.29 C47.32 31.26 64.16 32.66 75.94 27.77 C87.73 22.89 98.65 10.00 110.00 10.00 Z"></path>
+  <circle cx="110" cy="110" r="53" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-dasharray="298 35" stroke-dashoffset="17.1"></circle>
+  <path d="M88.6 110 L110 128 L153.1 76.6" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
