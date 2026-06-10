@@ -106,7 +106,7 @@ a { color: inherit; }
    HERO
    ═══════════════════════ */
 .hero { padding: 80px 0 96px; }
-.hero-grid { display: grid; grid-template-columns: 1fr 420px; gap: 88px; align-items: start; }
+.hero-grid { display: grid; grid-template-columns: 1fr 380px; gap: 88px; align-items: start; }
 .hero-text {}
 .hero h1 {
   font-size: 60px; font-weight: 700; letter-spacing: -0.035em;
@@ -131,10 +131,10 @@ a { color: inherit; }
   font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px;
 }
 .uc-header svg { width: 18px; height: 18px; color: var(--c-accent); }
-.uc-body { padding: 24px; }
+.uc-body { padding: 32px; }
 .upload-zone {
   border: 2px dashed rgba(19, 64, 255,0.25); border-radius: var(--r-lg);
-  padding: 40px 20px; text-align: center; cursor: pointer;
+  padding: 52px 24px; text-align: center; cursor: pointer;
   transition: all 0.2s; background: var(--c-gray-50);
 }
 .upload-zone:hover { border-color: var(--c-accent); background: var(--c-accent-ultra); transform: translateY(-1px); }
@@ -178,9 +178,9 @@ a { color: inherit; }
 }
 .add-more:hover { border-color: var(--c-accent); background: var(--c-accent-ultra); }
 .add-more svg { width: 14px; height: 14px; }
-.cost-sum { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--c-rule-soft); }
-.cost-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--c-fog); margin-bottom: 8px; }
-.cost-row .val { font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--c-ink); }
+.cost-sum { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--c-rule); }
+.cost-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; color: var(--c-fog); }
+.cost-row .val { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 18px; color: var(--c-ink); letter-spacing: -0.01em; }
 .cost-total { display: flex; justify-content: space-between; align-items: baseline; padding-top: 10px; border-top: 1px solid var(--c-rule); margin-top: 8px; }
 .cost-total-label { font-size: 14px; font-weight: 500; }
 .cost-total-val { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
@@ -403,7 +403,6 @@ a { color: inherit; }
               <button class="add-more" onclick="addFile()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Adaugă încă un document</button>
               <div class="cost-sum">
                 <div class="cost-row"><span id="cost-label">1 document × 5 lei</span><span class="val" id="cost-subtotal">5,00 lei</span></div>
-                <div class="cost-total"><span class="cost-total-label">Total</span><span class="cost-total-val" id="cost-total">5<span class="u"> lei</span></span></div>
               </div>
             </div>
             <button class="btn btn-accent btn-block btn-lg" style="margin-top:20px;" onclick="heroSign()">Semnează</button>
@@ -631,7 +630,6 @@ function render(){
   const n=files.length,t=n*PRICE;
   document.getElementById('cost-label').textContent=n===1?'1 document × 5 lei':`${n} documente × 5 lei`;
   document.getElementById('cost-subtotal').textContent=t.toFixed(2).replace('.',',')+' lei';
-  document.getElementById('cost-total').innerHTML=t+'<span class="u"> lei</span>';
 }
 function toggleFaq(btn){const item=btn.parentElement;const was=item.classList.contains('open');document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));if(!was)item.classList.add('open');}
 
