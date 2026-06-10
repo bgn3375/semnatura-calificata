@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>calificata.ro · Aplicație (prototip flux)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --c-accent:#1340FF; --c-accent-deep:#4A26F4; --c-accent-tint:#EEF4FF; --c-accent-ultra:rgba(19, 64, 255,0.05);
+  --c-white:#FFFFFF; --c-gray-50:#F8FAFC; --c-gray-100:#F1F5F9;
+  --c-dark:#08142E; --c-ink:#08142E; --c-fog:#64748B; --c-mist:#94A3B8;
+  --c-rule:rgba(15,23,42,0.10); --c-rule-soft:rgba(15,23,42,0.05);
+  --c-success:#16A34A; --c-success-bg:#DCFCE7; --c-warn:#B45309; --c-warn-bg:#FEF3C7; --c-error:#DC2626; --c-error-bg:#FEF2F2;
+  --r-sm:6px; --r-md:10px; --r-lg:16px; --r-xl:22px; --r-pill:999px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--c-ink);-webkit-font-smoothing:antialiased;}
+body{background:var(--c-gray-50);min-height:100vh;}
+em{font-family:'Fraunces',serif;font-style:normal;font-weight:inherit;color:var(--c-accent);font-size:calc(1em + 2px);}
+button{font-family:inherit;cursor:pointer;}
+a{color:inherit;}
+.mono{font-family:'JetBrains Mono',monospace;}
+
+/* logo */
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.brand-logo{width:32px;height:32px;flex-shrink:0;}
+.brand-logo svg{width:32px;height:32px;display:block;}
+.brand-name{display:block;font-size:17px;font-weight:600;letter-spacing:-0.02em;line-height:1;}
+.brand-sub{display:block;font-size:8px;font-weight:600;letter-spacing:0.10em;text-transform:uppercase;color:var(--c-mist);line-height:1;margin-top:3px;}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 24px;border-radius:var(--r-pill);font-size:15px;font-weight:500;border:none;cursor:pointer;transition:all .15s;text-decoration:none;}
+.btn-accent{background:var(--c-accent);color:#fff;}
+.btn-accent:hover{background:var(--c-accent-deep);}
+.btn-outline{background:#fff;color:var(--c-ink);border:1px solid var(--c-rule);}
+.btn-outline:hover{background:var(--c-gray-50);}
+.btn-ghost{background:transparent;color:var(--c-fog);}
+.btn-ghost:hover{color:var(--c-ink);}
+.btn-block{width:100%;}
+.btn-lg{padding:15px 28px;font-size:16px;}
+.btn[disabled]{opacity:.45;pointer-events:none;}
+
+/* fields */
+.field{margin-bottom:14px;}
+.label{display:block;font-size:12.5px;font-weight:500;color:var(--c-fog);margin-bottom:6px;}
+.input{width:100%;padding:12px 14px;background:#fff;border:1px solid var(--c-rule);border-radius:var(--r-md);font-family:inherit;font-size:14.5px;color:var(--c-ink);transition:border-color .15s;}
+.input:focus{outline:none;border-color:var(--c-accent);box-shadow:0 0 0 3px var(--c-accent-ultra);}
+.input::placeholder{color:var(--c-mist);}
+.field-hint{font-size:11.5px;color:var(--c-mist);margin-top:5px;}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* layout: centered flow card */
+.flow{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px 90px;}
+.flow-card{background:#fff;border:1px solid var(--c-rule);border-radius:var(--r-xl);padding:36px 32px;width:100%;max-width:440px;}
+.flow-card.wide{max-width:920px;}
+.flow-logo{display:flex;justify-content:center;margin-bottom:24px;}
+.flow h1{font-size:24px;font-weight:700;letter-spacing:-0.02em;text-align:center;margin-bottom:8px;}
+.flow .sub{color:var(--c-fog);font-size:14px;text-align:center;margin-bottom:26px;line-height:1.5;}
+.ctx-chip{display:inline-flex;align-items:center;gap:8px;background:var(--c-accent-tint);color:var(--c-accent-deep);border-radius:var(--r-pill);padding:6px 14px;font-size:12.5px;font-weight:500;margin:0 auto 22px;}
+.ctx-chip svg{width:14px;height:14px;}
+.center-chip{display:flex;justify-content:center;}
+.divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--c-mist);font-size:12px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--c-rule-soft);}
+.google-btn{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px;background:#fff;border:1px solid var(--c-rule);border-radius:var(--r-pill);font-size:14.5px;font-weight:500;color:var(--c-ink);cursor:pointer;}
+.google-btn:hover{background:var(--c-gray-50);}
+.g-ico{width:18px;height:18px;}
+.checkrow{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;color:var(--c-fog);line-height:1.45;margin:6px 0 20px;}
+.checkrow input{margin-top:2px;accent-color:var(--c-accent);}
+.checkrow a{color:var(--c-ink);text-decoration:underline;}
+.flow-foot{text-align:center;margin-top:22px;font-size:13px;color:var(--c-fog);}
+.flow-foot a{color:var(--c-accent);font-weight:500;text-decoration:none;}
+.muted-foot{text-align:center;margin-top:18px;font-size:11.5px;color:var(--c-mist);display:flex;align-items:center;justify-content:center;gap:6px;}
+.muted-foot svg{width:13px;height:13px;}
+
+/* OTP */
+.otp{display:flex;gap:8px;justify-content:center;margin:8px 0 18px;}
+.otp input{width:46px;height:54px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;border:1px solid var(--c-rule);border-radius:var(--r-md);background:#fff;color:var(--c-ink);}
+.otp input:focus{outline:none;border-color:var(--c-accent);box-shadow:0 0 0 3px var(--c-accent-ultra);}
+
+/* summary rows */
+.sum-row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;font-size:13.5px;border-bottom:1px solid var(--c-rule-soft);}
+.sum-row:last-child{border-bottom:none;}
+.sum-row .k{color:var(--c-fog);}
+.sum-row .v{font-family:'JetBrains Mono',monospace;font-weight:500;}
+.sum-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:12px;margin-top:6px;border-top:1px solid var(--c-rule);}
+.sum-total .k{font-weight:600;font-size:14.5px;}
+.sum-total .v{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;letter-spacing:-0.02em;}
+.sum-total .v .u{font-size:13px;color:var(--c-fog);font-family:'Inter';font-weight:500;}
+
+/* saved card */
+.saved-card{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--c-gray-50);border:1px solid var(--c-rule-soft);border-radius:var(--r-md);margin-bottom:16px;}
+.card-chip{width:38px;height:26px;border-radius:4px;background:linear-gradient(135deg,#1A1F71,#2A4FE5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;font-weight:700;letter-spacing:.05em;}
+.card-info{flex:1;}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;}
+.card-meta{font-size:11px;color:var(--c-fog);margin-top:1px;}
+.card-change{background:none;border:none;color:var(--c-accent);font-size:12.5px;font-weight:500;cursor:pointer;}
+
+/* spinner / transition */
+.spin-wrap{width:72px;height:72px;margin:0 auto 22px;position:relative;display:flex;align-items:center;justify-content:center;}
+.spin-ring{position:absolute;inset:0;border:3px solid var(--c-accent-tint);border-top-color:var(--c-accent);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spin-wrap svg{width:30px;height:30px;color:var(--c-accent);}
+.steps-list{display:flex;flex-direction:column;gap:12px;background:var(--c-gray-50);border-radius:var(--r-md);padding:18px 20px;margin-top:8px;}
+.step-li{display:flex;align-items:center;gap:12px;font-size:13.5px;}
+.step-ico{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.step-ico.done{background:var(--c-success);color:#fff;}
+.step-ico.active{background:var(--c-accent);color:#fff;animation:pulse 1.4s ease-in-out infinite;}
+.step-ico.todo{background:var(--c-rule);}
+.step-ico svg{width:12px;height:12px;}
+.step-ico.todo::after{content:'';width:6px;height:6px;border-radius:50%;background:var(--c-mist);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+.step-tx.done{color:var(--c-ink);}
+.step-tx.active{color:var(--c-ink);font-weight:500;}
+.step-tx.todo{color:var(--c-mist);}
+
+/* vendor (Simplifi) bar */
+.vendor-page{min-height:100vh;background:#0A1530;display:flex;flex-direction:column;}
+.vendor-bar{background:#0E1B3D;border-bottom:1px solid rgba(255,255,255,0.08);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
+.vendor-brand{display:flex;align-items:center;gap:8px;color:#fff;font-size:14.5px;font-weight:600;}
+.vendor-brand .at{color:#5B7BA8;font-weight:400;margin:0 2px;}
+.vendor-strip{background:#15233F;padding:9px 24px;text-align:center;font-size:12px;color:#9DB4D4;display:flex;align-items:center;justify-content:center;gap:8px;}
+.vendor-dot{width:6px;height:6px;border-radius:50%;background:var(--c-accent);animation:pulse 2s infinite;}
+.vendor-body{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 20px;}
+.vendor-card{background:#fff;border-radius:var(--r-xl);padding:32px;max-width:480px;width:100%;}
+.cam-frame{background:#0A1530;border:2px dashed rgba(19, 64, 255,0.4);border-radius:var(--r-md);aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;color:#5B7BA8;margin:18px 0;position:relative;overflow:hidden;}
+.cam-frame .id-mock{width:62%;height:62%;background:linear-gradient(135deg,#1c2c52,#243762);border-radius:8px;border:1px solid rgba(255,255,255,0.1);display:flex;flex-direction:column;justify-content:center;padding:14px;gap:6px;}
+.cam-frame .id-line{height:6px;border-radius:3px;background:rgba(255,255,255,0.18);}
+.cam-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:#fff;font-size:11px;padding:4px 10px;border-radius:var(--r-pill);white-space:nowrap;}
+.selfie-circle{width:160px;height:160px;border-radius:50%;margin:18px auto;background:linear-gradient(135deg,#1c2c52,#243762);border:3px solid var(--c-success);display:flex;align-items:center;justify-content:center;color:#5B7BA8;}
+.liveness-ok{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--c-success);font-size:13px;font-weight:500;margin-bottom:18px;}
+.liveness-ok svg{width:16px;height:16px;}
+
+/* sign reader */
+.sign-shell{display:grid;grid-template-columns:1fr 380px;gap:24px;max-width:1000px;width:100%;}
+.pdf-box{background:#fff;border:1px solid var(--c-rule);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column;}
+.pdf-head{padding:14px 18px;border-bottom:1px solid var(--c-rule-soft);display:flex;align-items:center;justify-content:space-between;background:var(--c-gray-50);font-size:13px;font-weight:500;}
+.pdf-head .pg{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-fog);}
+.pdf-body{padding:32px 40px;font-family:'Times New Roman',serif;font-size:14px;line-height:1.65;color:#1a1a1a;max-height:440px;overflow-y:auto;}
+.pdf-body h2{font-size:16px;text-align:center;margin-bottom:18px;}
+.pdf-body p{margin-bottom:12px;text-align:justify;}
+.pdf-body .sec{font-weight:bold;margin:16px 0 6px;}
+.scroll-prog{height:4px;background:var(--c-gray-100);border-radius:var(--r-pill);overflow:hidden;margin-bottom:14px;}
+.scroll-prog-fill{height:100%;background:var(--c-accent);width:8%;transition:width .15s;}
+.otp-card{background:#fff;border:1px solid var(--c-rule);border-radius:var(--r-lg);padding:22px;align-self:start;position:sticky;top:20px;}
+.otp-card h3{font-size:16px;font-weight:600;margin-bottom:6px;}
+.otp-card p{font-size:12.5px;color:var(--c-fog);line-height:1.5;margin-bottom:14px;}
+.locked{opacity:.5;pointer-events:none;}
+.legal-note{font-size:11px;color:var(--c-mist);line-height:1.5;margin-top:12px;}
+
+/* success */
+.success-ico{width:84px;height:84px;margin:0 auto 22px;background:var(--c-success);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;animation:pop .4s cubic-bezier(.16,1,.3,1);}
+@keyframes pop{0%{transform:scale(.5);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.success-ico svg{width:40px;height:40px;}
+.doc-chip{display:flex;align-items:center;gap:12px;background:var(--c-accent-ultra);border:1px solid var(--c-accent-tint);border-radius:var(--r-md);padding:14px 16px;margin-bottom:22px;text-align:left;}
+.doc-chip-ico{width:40px;height:40px;border-radius:var(--r-sm);background:var(--c-accent);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.doc-chip-ico svg{width:20px;height:20px;}
+.doc-chip-info{flex:1;min-width:0;}
+.doc-chip-name{font-size:13.5px;font-weight:500;}
+.doc-chip-status{font-size:11.5px;color:var(--c-success);font-weight:500;margin-top:2px;display:flex;align-items:center;gap:5px;}
+.doc-chip-status svg{width:12px;height:12px;}
+.share-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;}
+.share-btn{display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 8px;background:#fff;border:1px solid var(--c-rule);border-radius:var(--r-md);font-size:12px;font-weight:500;color:var(--c-ink);cursor:pointer;transition:all .15s;}
+.share-btn:hover{border-color:var(--c-accent);background:var(--c-accent-ultra);}
+.share-btn .si{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.share-btn .si svg{width:17px;height:17px;}
+.si.dl{background:var(--c-accent-tint);color:var(--c-accent-deep);}
+.si.em{background:#FEF3C7;color:#B45309;}
+.si.wa{background:#DCFCE7;color:#16A34A;}
+
+/* account shell */
+.app-shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh;}
+.app-side{background:#fff;border-right:1px solid var(--c-rule-soft);padding:20px 16px;display:flex;flex-direction:column;}
+.side-brand{padding:4px 8px 0;margin-bottom:28px;}
+.side-nav{display:flex;flex-direction:column;gap:2px;}
+.side-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--r-md);font-size:13.5px;font-weight:500;color:var(--c-ink);background:none;border:none;width:100%;text-align:left;cursor:pointer;font-family:inherit;}
+.side-item:hover{background:var(--c-gray-50);}
+.side-item.active{background:var(--c-accent-tint);color:var(--c-accent-deep);}
+.side-item svg{width:17px;height:17px;color:var(--c-fog);}
+.side-item.active svg{color:var(--c-accent);}
+.side-bottom{margin-top:auto;}
+.side-user{display:flex;align-items:center;gap:10px;padding:10px;background:var(--c-gray-50);border-radius:var(--r-md);}
+.side-avatar{width:32px;height:32px;border-radius:50%;background:var(--c-accent-tint);color:var(--c-accent-deep);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;}
+.side-uinfo{flex:1;min-width:0;}
+.side-uname{font-size:12.5px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.side-uemail{font-size:10.5px;color:var(--c-fog);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.app-main{background:var(--c-gray-50);padding:36px 44px 60px;overflow-y:auto;}
+.app-h1{font-size:28px;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px;}
+.app-sub{color:var(--c-fog);font-size:14px;margin-bottom:32px;}
+.acc-card{background:#fff;border:1px solid var(--c-rule);border-radius:var(--r-lg);padding:24px;margin-bottom:20px;}
+.acc-card h3{font-size:15px;font-weight:600;margin-bottom:4px;}
+.acc-card .ch{font-size:12.5px;color:var(--c-fog);margin-bottom:18px;}
+.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.acc-field .k{font-size:11.5px;color:var(--c-fog);margin-bottom:4px;}
+.acc-field .v{font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:var(--r-pill);}
+.pill.ok{background:var(--c-success-bg);color:var(--c-success);}
+.pill.ok::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--c-success);}
+.link-act{color:var(--c-accent);font-size:12.5px;font-weight:500;background:none;border:none;cursor:pointer;}
+
+/* docs table */
+.docs-table{background:#fff;border:1px solid var(--c-rule);border-radius:var(--r-lg);overflow:hidden;}
+.docs-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--c-rule-soft);}
+.docs-head h3{font-size:15px;font-weight:600;}
+.doc-row{display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--c-rule-soft);}
+.doc-row:last-child{border-bottom:none;}
+.doc-row:hover{background:var(--c-gray-50);}
+.doc-ico{width:40px;height:40px;border-radius:var(--r-sm);background:var(--c-accent-tint);color:var(--c-accent-deep);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.doc-ico svg{width:19px;height:19px;}
+.doc-meta{flex:1;min-width:0;}
+.doc-name{font-size:14px;font-weight:500;}
+.doc-info{font-size:11.5px;color:var(--c-fog);margin-top:2px;display:flex;gap:10px;flex-wrap:wrap;}
+.doc-info .mono{color:var(--c-fog);}
+.doc-actions{display:flex;gap:6px;}
+.icon-btn{width:34px;height:34px;border-radius:var(--r-md);border:1px solid var(--c-rule);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--c-fog);transition:all .15s;}
+.icon-btn:hover{border-color:var(--c-accent);color:var(--c-accent);background:var(--c-accent-ultra);}
+.icon-btn svg{width:16px;height:16px;}
+.badge-signed{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--c-success);}
+.badge-signed::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--c-success);}
+
+/* share modal */
+.modal-bg{position:fixed;inset:0;background:rgba(8,20,46,0.45);display:none;align-items:center;justify-content:center;z-index:500;padding:20px;}
+.modal-bg.open{display:flex;}
+.modal{background:#fff;border-radius:var(--r-xl);padding:28px;max-width:400px;width:100%;}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:6px;}
+.modal p{font-size:13px;color:var(--c-fog);margin-bottom:20px;}
+.modal .close-x{float:right;background:none;border:none;color:var(--c-mist);cursor:pointer;}
+
+/* screen control + picker */
+.screen{display:none;}
+.screen.active{display:block;}
+.picker{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:999;background:var(--c-dark);color:#fff;padding:6px;border-radius:var(--r-pill);display:flex;gap:2px;max-width:96vw;overflow-x:auto;}
+.picker button{background:none;border:none;color:rgba(255,255,255,0.55);padding:7px 13px;border-radius:var(--r-pill);font-size:12px;font-weight:500;white-space:nowrap;cursor:pointer;}
+.picker button.active{background:var(--c-accent);color:#fff;}
+.picker button:hover:not(.active){color:#fff;}
+
+@media(max-width:880px){.sign-shell{grid-template-columns:1fr;}.app-shell{grid-template-columns:1fr;}.app-side{display:none;}.acc-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- ════ PICKER ════ -->
+<div class="picker" id="picker">
+  <button data-s="register" class="active">Register</button>
+  <button data-s="phone">Nr. tel (Google)</button>
+  <button data-s="verify">Verif. tel</button>
+  <button data-s="login">Login</button>
+  <button data-s="pay">Plată</button>
+  <button data-s="transition">Tranziție</button>
+  <button data-s="kyc-intro">KYC intro</button>
+  <button data-s="kyc-scan">Scan ID</button>
+  <button data-s="kyc-selfie">Selfie</button>
+  <button data-s="kyc-wait">KYC wait</button>
+  <button data-s="sign">Semnare</button>
+  <button data-s="success">Succes</button>
+  <button data-s="account">Contul tău</button>
+</div>
+
+<!-- ════ 1. REGISTER ════ -->
+<div class="screen active" id="screen-register">
+<div class="flow">
+  <div class="flow-card">
+    <div class="flow-logo">LOGO</div>
+    <div class="center-chip"><div class="ctx-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>1 document de semnat · 5 lei</div></div>
+    <h1>Creează cont</h1>
+    <p class="sub">Începi gratuit. Plătești doar când semnezi.</p>
+
+    <button class="google-btn" onclick="show('phone')">
+      <svg class="g-ico" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 13.2 4.5 4.5 13.2 4.5 24S13.2 43.5 24 43.5 43.5 34.8 43.5 24c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 16.3 4.5 9.7 8.9 6.3 14.7z"/><path fill="#4CAF50" d="M24 43.5c5.4 0 10.3-2 13.9-5.3l-6.4-5.4c-2 1.5-4.6 2.4-7.5 2.4-5.2 0-9.6-3.3-11.2-7.9l-6.5 5C9.6 39 16.2 43.5 24 43.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4 5.4l6.4 5.4c-.5.4 6.8-5 6.8-14.8 0-1.2-.1-2.3-.4-3.5z"/></svg>
+      Continuă cu Google
+    </button>
+    <div class="divider">sau cu email</div>
+
+    <div class="field"><label class="label">Email</label><input class="input" type="email" placeholder="numele.tau@email.ro" value="mihai.popescu@gmail.com"></div>
+    <div class="field"><label class="label">Parolă</label><input class="input" type="password" placeholder="Min. 8 caractere" value="••••••••••"></div>
+    <div class="field"><label class="label">Telefon</label><input class="input" type="tel" placeholder="07XX XXX XXX" value="0721 234 567"><div class="field-hint">Necesar pentru a semna cu cod OTP pe SMS.</div></div>
+
+    <div class="checkrow"><input type="checkbox" id="t" checked><label for="t">Sunt de acord cu <a href="#">Termenii</a> și <a href="#">Politica GDPR</a>.</label></div>
+    <button class="btn btn-accent btn-block btn-lg" onclick="show('verify')">Continuă</button>
+    <div class="flow-foot">Ai deja cont? <a href="#" onclick="show('login');return false;">Intră în cont</a></div>
+  </div>
+</div>
+</div>
+
+<!-- ════ 1b. PHONE (after Google) ════ -->
+<div class="screen" id="screen-phone">
+<div class="flow">
+  <div class="flow-card">
+    <div class="flow-logo">LOGO</div>
+    <div class="center-chip"><div class="ctx-chip" style="background:var(--c-gray-100);color:var(--c-ink);"><svg viewBox="0 0 48 48" width="14" height="14"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 13.2 4.5 4.5 13.2 4.5 24S13.2 43.5 24 43.5 43.5 34.8 43.5 24c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 16.3 4.5 9.7 8.9 6.3 14.7z"/><path fill="#4CAF50" d="M24 43.5c5.4 0 10.3-2 13.9-5.3l-6.4-5.4c-2 1.5-4.6 2.4-7.5 2.4-5.2 0-9.6-3.3-11.2-7.9l-6.5 5C9.6 39 16.2 43.5 24 43.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4 5.4l6.4 5.4c-.5.4 6.8-5 6.8-14.8 0-1.2-.1-2.3-.4-3.5z"/></svg>mihai.popescu@gmail.com</div></div>
+    <h1>Încă un pas</h1>
+    <p class="sub">Avem nevoie de numărul tău de telefon pentru a-ți trimite codul de semnare (OTP) prin SMS.</p>
+    <div class="field"><label class="label">Telefon</label><input class="input" type="tel" placeholder="07XX XXX XXX" autofocus></div>
+    <button class="btn btn-accent btn-block btn-lg" onclick="show('verify')">Continuă</button>
+    <div class="muted-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Folosit doar pentru semnare și securitatea contului.</div>
+  </div>
+</div>
+</div>
+
+<!-- ════ 2. VERIFY PHONE ════ -->
+<div class="screen" id="screen-verify">
+<div class="flow">
+  <div class="flow-card">
+    <div class="flow-logo">LOGO</div>
+    <h1>Verifică numărul</h1>
+    <p class="sub">Am trimis un cod de 6 cifre prin SMS la<br><strong>+40 721 234 567</strong></p>
+    <div class="otp">
+      <input maxlength="1" value="4"><input maxlength="1" value="8"><input maxlength="1" value="2"><input maxlength="1" value="1"><input maxlength="1" value=""><input maxlength="1" value="">
+    </div>
+    <button class="btn btn-accent btn-block btn-lg" onclick="show('pay')">Confirmă</button>
+    <div class="flow-foot">Nu ai primit codul? <a href="#">Retrimite (0:42)</a></div>
+  </div>
+</div>
+</div>
+
+<!-- ════ 3. LOGIN ════ -->
+<div class="screen" id="screen-login">
+<div class="flow">
+  <div class="flow-card">
+    <div class="flow-logo">LOGO</div>
+    <h1>Bun venit înapoi</h1>
+    <p class="sub">Intră în cont pentru a semna documente.</p>
+    <button class="google-btn" onclick="show('account')">
+      <svg class="g-ico" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 13.2 4.5 4.5 13.2 4.5 24S13.2 43.5 24 43.5 43.5 34.8 43.5 24c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 16.3 4.5 9.7 8.9 6.3 14.7z"/><path fill="#4CAF50" d="M24 43.5c5.4 0 10.3-2 13.9-5.3l-6.4-5.4c-2 1.5-4.6 2.4-7.5 2.4-5.2 0-9.6-3.3-11.2-7.9l-6.5 5C9.6 39 16.2 43.5 24 43.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4 5.4l6.4 5.4c-.5.4 6.8-5 6.8-14.8 0-1.2-.1-2.3-.4-3.5z"/></svg>
+      Continuă cu Google
+    </button>
+    <div class="divider">sau</div>
+    <div class="field"><label class="label">Email sau telefon</label><input class="input" value="mihai.popescu@gmail.com"></div>
+    <div class="field"><label class="label">Parolă</label><input class="input" type="password" value="••••••••••"></div>
+    <div style="text-align:right;margin:-4px 0 18px;"><a href="#" style="font-size:12.5px;color:var(--c-accent);text-decoration:none;">Ai uitat parola?</a></div>
+    <button class="btn btn-accent btn-block btn-lg" onclick="show('account')">Intră în cont</button>
+    <div class="flow-foot">Nu ai cont? <a href="#" onclick="show('register');return false;">Creează cont</a></div>
+  </div>
+</div>
+</div>
+
+<!-- ════ 4. PAYMENT ════ -->
+<div class="screen" id="screen-pay">
+<div class="flow">
+  <div class="flow-card">
+    <div class="flow-logo">LOGO</div>
+    <h1>Plată</h1>
+    <p class="sub">Plătești acum, semnezi imediat după.</p>
+    <div style="background:var(--c-gray-50);border-radius:var(--r-md);padding:14px 16px;margin-bottom:20px;">
+      <div class="sum-row"><span class="k">contract-inchiriere.pdf</span><span class="v">5,00 lei</span></div>
+      <div class="sum-total"><span class="k">Total</span><span class="v">5<span class="u"> lei</span></span></div>
+    </div>
+    <div class="field"><label class="label">Nume pe card</label><input class="input" value="MIHAI POPESCU"></div>
+    <div class="field"><label class="label">Număr card</label><input class="input mono" value="4242 4242 4242 4242"></div>
+    <div class="row-2">
+      <div class="field"><label class="label">Expirare</label><input class="input mono" value="12 / 28"></div>
+      <div class="field"><label class="label">CVC</label><input class="input mono" value="123"></div>
+    </div>
+    <div class="checkrow"><input type="checkbox" id="sv" checked><label for="sv">Salvează cardul pentru semnări viitoare</label></div>
+    <button class="btn btn-accent btn-block btn-lg" onclick="show('transition')">Plătește 5 lei</button>
+    <div class="muted-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Plată securizată prin Stripe · 3D Secure</div>
+  </div>
+</div>
+</div>
+
+<!-- ════ 5. TRANSITION ════ -->
+<div class="screen" id="screen-transition">
+<div class="flow">
+  <div class="flow-card" style="text-align:center;">
+    <div class="spin-wrap"><div class="spin-ring"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
+    <h1>Inițiem semnarea</h1>
+    <p class="sub">Pregătim sesiunea de semnare securizată.</p>
+    <div class="steps-list">
+      <div class="step-li"><div class="step-ico done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="step-tx done">Plată confirmată</span></div>
+      <div class="step-li"><div class="step-ico done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="step-tx done">Document pregătit</span></div>
+      <div class="step-li"><div class="step-ico active"></div><span class="step-tx active">Verificare identitate</span></div>
+      <div class="step-li"><div class="step-ico todo"></div><span class="step-tx todo">Aplicare semnătură calificată</span></div>
+    </div>
+    <button class="btn btn-accent btn-block btn-lg" style="margin-top:22px;" onclick="show('kyc-intro')">Continuă</button>
+    <div class="muted-foot">În producție acest pas e automat (sub 1 secundă).</div>
+  </div>
+</div>
+</div>
+
+<!-- ════ 6. KYC INTRO ════ -->
+<div class="screen" id="screen-kyc-intro">
+<div class="flow">
+  <div class="flow-card" style="text-align:center;">
+    <div class="flow-logo">LOGO</div>
+    <h1>Verifică-ți identitatea</h1>
+    <p class="sub">O singură dată. La semnările viitoare intri direct cu OTP.</p>
+    <div class="steps-list" style="text-align:left;">
+      <div class="step-li"><div class="step-ico done" style="background:var(--c-accent);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="step-tx done">Scanezi buletinul (față + verso)</span></div>
+      <div class="step-li"><div class="step-ico done" style="background:var(--c-accent);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg></div><span class="step-tx done">Faci un selfie (verificare live)</span></div>
+      <div class="step-li"><div class="step-ico done" style="background:var(--c-accent);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="step-tx done">Validare în 2-5 minute</span></div>
+    </div>
+    <div style="background:var(--c-accent-ultra);border:1px solid var(--c-accent-tint);border-radius:var(--r-md);padding:12px 14px;margin-top:16px;font-size:12.5px;color:var(--c-accent-deep);">Vei fi verificat prin <strong>Simplifi</strong>, furnizorul nostru de încredere acreditat eIDAS.</div>
+    <button class="btn btn-accent btn-block btn-lg" style="margin-top:20px;" onclick="show('kyc-scan')">Începe verificarea</button>
+  </div>
+</div>
+</div>
+
+<!-- ════ 7. KYC SCAN (Simplifi) ════ -->
+<div class="screen" id="screen-kyc-scan">
+<div class="vendor-page">
+  <div class="vendor-bar">
+    <div class="vendor-brand">calificata.ro<span class="at">@</span>Simplifi</div>
+    <div style="color:#5B7BA8;font-size:12px;">Pas 2 din 4</div>
+  </div>
+  <div class="vendor-strip"><span class="vendor-dot"></span>Verificare identitate securizată prin <strong style="color:#C5D6EE;">Simplifi</strong> · QTSP eIDAS</div>
+  <div class="vendor-body">
+    <div class="vendor-card">
+      <h1 style="font-size:20px;font-weight:700;margin-bottom:6px;">Scanează buletinul</h1>
+      <p style="color:var(--c-fog);font-size:13px;">Așază buletinul în cadru. Detectăm automat marginile.</p>
+      <div class="cam-frame">
+        <div class="id-mock"><div class="id-line" style="width:40%;"></div><div class="id-line" style="width:70%;"></div><div class="id-line" style="width:55%;"></div></div>
+        <div class="cam-hint">Aliniază buletinul în cadru</div>
+      </div>
+      <button class="btn btn-accent btn-block btn-lg" onclick="show('kyc-selfie')">Continuă cu selfie</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════ 8. KYC SELFIE (Simplifi) ════ -->
+<div class="screen" id="screen-kyc-selfie">
+<div class="vendor-page">
+  <div class="vendor-bar">
+    <div class="vendor-brand">calificata.ro<span class="at">@</span>Simplifi</div>
+    <div style="color:#5B7BA8;font-size:12px;">Pas 3 din 4</div>
+  </div>
+  <div class="vendor-strip"><span class="vendor-dot"></span>Verificare identitate securizată prin <strong style="color:#C5D6EE;">Simplifi</strong> · QTSP eIDAS</div>
+  <div class="vendor-body">
+    <div class="vendor-card" style="text-align:center;">
+      <h1 style="font-size:20px;font-weight:700;margin-bottom:6px;">Selfie de verificare</h1>
+      <p style="color:var(--c-fog);font-size:13px;">Privește în cameră. Nu purta ochelari sau pălărie.</p>
+      <div class="selfie-circle"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg></div>
+      <div class="liveness-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Fața detectată · liveness check OK</div>
+      <button class="btn btn-accent btn-block btn-lg" onclick="show('kyc-wait')">Trimite la validare</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════ 9. KYC WAITING ════ -->
+<div class="screen" id="screen-kyc-wait">
+<div class="flow">
+  <div class="flow-card" style="text-align:center;">
+    <div class="spin-wrap"><div class="spin-ring"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></div>
+    <h1>Verificare în curs</h1>
+    <p class="sub">Trimisă către <strong>Simplifi</strong> acum câteva secunde. Un operator verifică buletinul și selfie-ul.</p>
+    <div class="center-chip"><div class="ctx-chip" style="background:var(--c-warn-bg);color:var(--c-warn);">Timp estimat: 2-5 minute</div></div>
+    <p class="sub" style="margin-top:8px;">Vei primi un email cu rezultatul. Poți închide pagina.</p>
+    <button class="btn btn-accent btn-block btn-lg" onclick="show('sign')">Continuă (simulează KYC validat)</button>
+  </div>
+</div>
+</div>
+
+<!-- ════ 10. SIGN (read + OTP) — Rex/Simplifi session ════ -->
+<div class="screen" id="screen-sign">
+<div class="vendor-page">
+  <div class="vendor-bar">
+    <div class="vendor-brand">calificata.ro<span class="at">@</span>Simplifi</div>
+    <div style="color:#5B7BA8;font-size:12px;">Semnare document</div>
+  </div>
+  <div class="vendor-strip"><span class="vendor-dot"></span>Semnătură electronică calificată aplicată prin <strong style="color:#C5D6EE;">Simplifi</strong> · QTSP eIDAS</div>
+  <div class="vendor-body" style="align-items:flex-start;">
+  <div class="sign-shell">
+    <div class="pdf-box">
+      <div class="pdf-head"><span>contract-inchiriere.pdf</span><span class="pg">1 / 1</span></div>
+      <div class="pdf-body" id="pdfScroll" onscroll="onPdfScroll()">
+        <h2>CONTRACT DE ÎNCHIRIERE</h2>
+        <p style="text-align:center;color:#666;font-size:12px;">Încheiat astăzi, 9 iunie 2026</p>
+        <div class="sec">PĂRȚILE CONTRACTANTE</div>
+        <p><strong>1. LOCATORUL:</strong> Andrei Marinescu, domiciliat în București, Str. Aviatorilor nr. 12, sector 1, CNP 1850515123456.</p>
+        <p><strong>2. LOCATARUL:</strong> Mihai Popescu, domiciliat în București, Bd. Magheru nr. 8, sector 1, CNP 1920820789012.</p>
+        <div class="sec">OBIECTUL CONTRACTULUI</div>
+        <p>Art. 1. Locatorul închiriază apartamentul situat în București, Str. Plopilor nr. 5, ap. 23, compus din 2 camere, în suprafață de 56 mp.</p>
+        <p>Art. 2. Durata închirierii este de 12 luni, de la 1 iulie 2026 până la 30 iunie 2027.</p>
+        <div class="sec">CHIRIA ȘI MODALITATEA DE PLATĂ</div>
+        <p>Art. 3. Chiria lunară este de 2.500 lei, plătibilă în avans până în data de 5 a fiecărei luni.</p>
+        <p>Art. 4. La semnarea contractului, Locatarul achită o garanție egală cu o chirie lunară.</p>
+        <div class="sec">OBLIGAȚIILE PĂRȚILOR</div>
+        <p>Art. 5. Locatarul se obligă să folosească imobilul cu diligența unui bun proprietar și să achite la timp utilitățile.</p>
+        <p>Art. 6. Locatorul garantează folosința liniștită a imobilului pe toată durata contractului.</p>
+        <p>Prezentul contract a fost încheiat în 2 exemplare, câte unul pentru fiecare parte, semnate cu semnătură electronică calificată.</p>
+      </div>
+    </div>
+    <div class="otp-card">
+      <div class="scroll-prog"><div class="scroll-prog-fill" id="progFill"></div></div>
+      <div id="readHint" style="font-size:12px;color:var(--c-fog);margin-bottom:14px;">Derulează până la final pentru a putea semna.</div>
+      <div id="otpBlock" class="locked">
+        <h3>Cod de semnare</h3>
+        <p>Am trimis un cod prin SMS la <strong>+40 721 234 567</strong>.</p>
+        <div class="otp"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"></div>
+        <button class="btn btn-accent btn-block btn-lg" onclick="show('success')">Semnează documentul</button>
+        <p class="legal-note">Apăsând „Semnează documentul" aplici o semnătură electronică calificată (QES) conform Regulamentului eIDAS 910/2014, cu valoare juridică deplină.</p>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+</div>
+
+<!-- ════ 11. SUCCESS ════ -->
+<div class="screen" id="screen-success">
+<div class="flow">
+  <div class="flow-card" style="text-align:center;">
+    <div class="success-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h1>Document semnat cu succes</h1>
+    <p class="sub">Ți-am trimis documentul semnat și pe email.</p>
+    <div class="doc-chip">
+      <div class="doc-chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div class="doc-chip-info">
+        <div class="doc-chip-name">contract-inchiriere.pdf</div>
+        <div class="doc-chip-status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Semnat QES · 9 iun 2026, 14:32</div>
+      </div>
+    </div>
+    <div class="share-grid">
+      <button class="share-btn" onclick="alert('Descărcare PDF semnat...')"><span class="si dl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Descarcă</button>
+      <button class="share-btn" onclick="openShare('email')"><span class="si em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg></span>Email</button>
+      <button class="share-btn" onclick="openShare('whatsapp')"><span class="si wa"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.5 15.3L2 22l4.8-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1112 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.1-.3.2-.5.1-.7-.3-1.4-.7-2-1.4-.4-.5-.8-1-.9-1.2-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.4 0-.1 0-.3 0-.4 0-.1-.5-1.3-.7-1.7-.2-.4-.4-.4-.5-.4h-.5c-.2 0-.4 0-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.2 1.6 2.4 3.8 3.4.5.2.9.4 1.3.5.5.2 1 .1 1.3.1.4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1l-.4-.3z"/></svg></span>WhatsApp</button>
+    </div>
+    <button class="btn btn-outline btn-block" onclick="show('account')">Vezi documentele mele</button>
+  </div>
+</div>
+</div>
+
+<!-- ════ 12. ACCOUNT ════ -->
+<div class="screen" id="screen-account">
+<div class="app-shell">
+  <aside class="app-side">
+    <div class="side-brand">LOGO</div>
+    <nav class="side-nav">
+      <button class="side-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Documentele mele</button>
+      <button class="side-item" onclick="show('register')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Semnează document nou</button>
+      <button class="side-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Setări cont</button>
+    </nav>
+    <div class="side-bottom"><div class="side-user"><div class="side-avatar">MP</div><div class="side-uinfo"><div class="side-uname">Mihai Popescu</div><div class="side-uemail">mihai.popescu@gmail.com</div></div></div></div>
+  </aside>
+  <main class="app-main">
+    <h1 class="app-h1">Contul tău</h1>
+    <p class="app-sub">Datele tale de cont și documentele semnate.</p>
+
+    <div class="acc-card">
+      <h3>Date de autentificare</h3>
+      <div class="ch">Cum te conectezi și cum semnezi.</div>
+      <div class="acc-grid">
+        <div class="acc-field"><div class="k">Nume</div><div class="v">Mihai Popescu</div></div>
+        <div class="acc-field"><div class="k">Email</div><div class="v">mihai.popescu@gmail.com</div></div>
+        <div class="acc-field"><div class="k">Telefon (OTP)</div><div class="v">+40 721 234 567</div></div>
+        <div class="acc-field"><div class="k">Autentificare</div><div class="v"><svg width="16" height="16" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 13.2 4.5 4.5 13.2 4.5 24S13.2 43.5 24 43.5 43.5 34.8 43.5 24c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 16.3 4.5 9.7 8.9 6.3 14.7z"/><path fill="#4CAF50" d="M24 43.5c5.4 0 10.3-2 13.9-5.3l-6.4-5.4c-2 1.5-4.6 2.4-7.5 2.4-5.2 0-9.6-3.3-11.2-7.9l-6.5 5C9.6 39 16.2 43.5 24 43.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4 5.4l6.4 5.4c-.5.4 6.8-5 6.8-14.8 0-1.2-.1-2.3-.4-3.5z"/></svg> Google · parolă setată</div></div>
+        <div class="acc-field"><div class="k">Identitate</div><div class="v"><span class="pill ok">Validată prin Simplifi</span></div></div>
+        <div class="acc-field"><div class="k">Card salvat</div><div class="v">VISA •••• 4242 <button class="link-act">Schimbă</button></div></div>
+      </div>
+    </div>
+
+    <div class="docs-table">
+      <div class="docs-head"><h3>Documente semnate</h3><button class="btn btn-accent" style="padding:9px 18px;font-size:13.5px;" onclick="show('register')">Document nou</button></div>
+      <div class="doc-row">
+        <div class="doc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="doc-meta"><div class="doc-name">contract-inchiriere.pdf</div><div class="doc-info"><span class="badge-signed">Semnat</span><span class="mono">REQ-1d-00142-26</span><span>9 iun 2026, 14:32</span><span class="mono">5,00 lei</span></div></div>
+        <div class="doc-actions">
+          <button class="icon-btn" title="Descarcă" onclick="alert('Descărcare PDF...')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+          <button class="icon-btn" title="Email" onclick="openShare('email')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg></button>
+          <button class="icon-btn" title="WhatsApp" onclick="openShare('whatsapp')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.5 15.3L2 22l4.8-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1112 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.1-.3.2-.5.1-.7-.3-1.4-.7-2-1.4-.4-.5-.8-1-.9-1.2-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.4 0-.1 0-.3 0-.4 0-.1-.5-1.3-.7-1.7-.2-.4-.4-.4-.5-.4h-.5c-.2 0-.4 0-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.2 1.6 2.4 3.8 3.4.5.2.9.4 1.3.5.5.2 1 .1 1.3.1.4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1l-.4-.3z"/></svg></button>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div class="doc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="doc-meta"><div class="doc-name">declaratie-proprie-raspundere.pdf</div><div class="doc-info"><span class="badge-signed">Semnat</span><span class="mono">REQ-1d-00138-26</span><span>2 iun 2026, 10:15</span><span class="mono">5,00 lei</span></div></div>
+        <div class="doc-actions">
+          <button class="icon-btn" title="Descarcă" onclick="alert('Descărcare PDF...')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+          <button class="icon-btn" title="Email" onclick="openShare('email')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg></button>
+          <button class="icon-btn" title="WhatsApp" onclick="openShare('whatsapp')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.5 15.3L2 22l4.8-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1112 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.1-.3.2-.5.1-.7-.3-1.4-.7-2-1.4-.4-.5-.8-1-.9-1.2-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.4 0-.1 0-.3 0-.4 0-.1-.5-1.3-.7-1.7-.2-.4-.4-.4-.5-.4h-.5c-.2 0-.4 0-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.2 1.6 2.4 3.8 3.4.5.2.9.4 1.3.5.5.2 1 .1 1.3.1.4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1l-.4-.3z"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+
+<!-- ════ SHARE MODAL ════ -->
+<div class="modal-bg" id="shareModal">
+  <div class="modal">
+    <button class="close-x" onclick="closeShare()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <h3 id="shareTitle">Trimite documentul</h3>
+    <p id="shareDesc">Documentul semnat (PDF) va fi trimis.</p>
+    <div id="shareBody"></div>
+    <button class="btn btn-accent btn-block btn-lg" style="margin-top:8px;" onclick="doShare()">Trimite</button>
+  </div>
+</div>
+
+<script>
+const LOGO = `<a class="brand" href="#" style="text-decoration:none;"><img src="calificata-logo-full.svg" alt="calificata.ro" style="height:42px;width:auto;display:block;"></a>`;
+document.querySelectorAll('.flow-logo, .side-brand').forEach(el=>{ if(el.textContent.trim()==='LOGO') el.innerHTML=LOGO; });
+
+function show(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.getElementById('screen-'+s)?.classList.add('active');
+  document.querySelectorAll('#picker button').forEach(b=>b.classList.toggle('active', b.dataset.s===s));
+  window.scrollTo(0,0);
+  if(s==='sign'){ resetSign(); }
+}
+document.querySelectorAll('#picker button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.s)));
+// open at screen from URL hash (e.g. app.html#login)
+(function(){ const h=(location.hash||'').replace('#',''); if(h && document.getElementById('screen-'+h)) show(h); })();
+// demo screen-picker only on localhost; hidden on live (natural flow via buttons)
+(function(){ if(location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){ const p=document.getElementById('picker'); if(p) p.style.display='none'; } })();
+
+// sign scroll gate
+function onPdfScroll(){
+  const el=document.getElementById('pdfScroll');
+  const p=el.scrollTop/(el.scrollHeight-el.clientHeight);
+  document.getElementById('progFill').style.width=Math.max(8,Math.round(p*100))+'%';
+  if(p>0.92){
+    document.getElementById('otpBlock').classList.remove('locked');
+    document.getElementById('readHint').innerHTML='<span style="color:var(--c-success);font-weight:500;">✓ Ai citit tot documentul</span>';
+  }
+}
+function resetSign(){
+  const el=document.getElementById('pdfScroll'); if(el) el.scrollTop=0;
+  document.getElementById('progFill').style.width='8%';
+  document.getElementById('otpBlock').classList.add('locked');
+  document.getElementById('readHint').textContent='Derulează până la final pentru a putea semna.';
+}
+
+// OTP autotab
+document.querySelectorAll('.otp').forEach(grp=>{
+  const ins=[...grp.querySelectorAll('input')];
+  ins.forEach((inp,i)=>inp.addEventListener('input',()=>{ if(inp.value&&ins[i+1]) ins[i+1].focus(); }));
+});
+
+// share modal
+let shareMode='email';
+function openShare(mode){
+  shareMode=mode;
+  const t=document.getElementById('shareTitle'),d=document.getElementById('shareDesc'),b=document.getElementById('shareBody');
+  if(mode==='email'){ t.textContent='Trimite pe email'; d.textContent='Documentul semnat (PDF) va fi trimis ca atașament.'; b.innerHTML='<div class="field"><label class="label">Adresă email</label><input class="input" placeholder="destinatar@email.ro"></div>'; }
+  else { t.textContent='Trimite pe WhatsApp'; d.textContent='Trimitem un link securizat de descărcare pe WhatsApp.'; b.innerHTML='<div class="field"><label class="label">Număr WhatsApp</label><input class="input" placeholder="07XX XXX XXX" value="0721 234 567"></div>'; }
+  document.getElementById('shareModal').classList.add('open');
+}
+function closeShare(){ document.getElementById('shareModal').classList.remove('open'); }
+function doShare(){ closeShare(); alert(shareMode==='email'?'Email trimis cu documentul semnat ✓':'Link WhatsApp trimis ✓'); }
+document.getElementById('shareModal').addEventListener('click',e=>{ if(e.target.id==='shareModal') closeShare(); });
+</script>
+</body>
+</html>
