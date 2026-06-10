@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>calificata.ro · Aplicație (prototip flux)</title>
+<title>calificata.ro · Aplicație (doar calificata.ro)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -249,11 +249,6 @@ a{color:inherit;}
   <button data-s="login">Login</button>
   <button data-s="pay">Plată</button>
   <button data-s="transition">Tranziție</button>
-  <button data-s="kyc-intro">KYC intro</button>
-  <button data-s="kyc-scan">Scan ID</button>
-  <button data-s="kyc-selfie">Selfie</button>
-  <button data-s="kyc-wait">KYC wait</button>
-  <button data-s="sign">Semnare</button>
   <button data-s="success">Succes</button>
   <button data-s="account">Contul tău</button>
 </div>
@@ -365,136 +360,14 @@ a{color:inherit;}
 <div class="flow">
   <div class="flow-card" style="text-align:center;">
     <div class="spin-wrap"><div class="spin-ring"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
-    <h1>Inițiem semnarea</h1>
-    <p class="sub">Pregătim sesiunea de semnare securizată.</p>
-    <div class="steps-list">
-      <div class="step-li"><div class="step-ico done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="step-tx done">Plată confirmată</span></div>
-      <div class="step-li"><div class="step-ico done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="step-tx done">Document pregătit</span></div>
-      <div class="step-li"><div class="step-ico active"></div><span class="step-tx active">Verificare identitate</span></div>
-      <div class="step-li"><div class="step-ico todo"></div><span class="step-tx todo">Aplicare semnătură calificată</span></div>
+    <h1>Semnăm documentul tău</h1>
+    <p class="sub">Durează câteva secunde. Nu închide pagina.</p>
+    <div class="steps-list" id="trsteps">
+      <div class="step-li"><div class="step-ico todo"></div><span class="step-tx todo">Plată confirmată</span></div>
+      <div class="step-li"><div class="step-ico todo"></div><span class="step-tx todo">Identitate verificată</span></div>
+      <div class="step-li"><div class="step-ico todo"></div><span class="step-tx todo">Semnătură calificată aplicată</span></div>
+      <div class="step-li"><div class="step-ico todo"></div><span class="step-tx todo">Document semnat livrat pe email</span></div>
     </div>
-    <button class="btn btn-accent btn-block btn-lg" style="margin-top:22px;" onclick="show('kyc-intro')">Continuă</button>
-    <div class="muted-foot">În producție acest pas e automat (sub 1 secundă).</div>
-  </div>
-</div>
-</div>
-
-<!-- ════ 6. KYC INTRO ════ -->
-<div class="screen" id="screen-kyc-intro">
-<div class="flow">
-  <div class="flow-card" style="text-align:center;">
-    <div class="flow-logo">LOGO</div>
-    <h1>Verifică-ți identitatea</h1>
-    <p class="sub">O singură dată. La semnările viitoare intri direct cu OTP.</p>
-    <div class="steps-list" style="text-align:left;">
-      <div class="step-li"><div class="step-ico done" style="background:var(--c-accent);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="step-tx done">Scanezi buletinul (față + verso)</span></div>
-      <div class="step-li"><div class="step-ico done" style="background:var(--c-accent);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg></div><span class="step-tx done">Faci un selfie (verificare live)</span></div>
-      <div class="step-li"><div class="step-ico done" style="background:var(--c-accent);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="step-tx done">Validare în 2-5 minute</span></div>
-    </div>
-    <div style="background:var(--c-accent-ultra);border:1px solid var(--c-accent-tint);border-radius:var(--r-md);padding:12px 14px;margin-top:16px;font-size:12.5px;color:var(--c-accent-deep);">Vei fi verificat prin <strong>Simplifi</strong>, furnizorul nostru de încredere acreditat eIDAS.</div>
-    <button class="btn btn-accent btn-block btn-lg" style="margin-top:20px;" onclick="show('kyc-scan')">Începe verificarea</button>
-  </div>
-</div>
-</div>
-
-<!-- ════ 7. KYC SCAN (Simplifi) ════ -->
-<div class="screen" id="screen-kyc-scan">
-<div class="vendor-page">
-  <div class="vendor-bar">
-    <div class="vendor-brand">calificata.ro<span class="at">@</span>Simplifi</div>
-    <div style="color:#5B7BA8;font-size:12px;">Pas 2 din 4</div>
-  </div>
-  <div class="vendor-strip"><span class="vendor-dot"></span>Verificare identitate securizată prin <strong style="color:#C5D6EE;">Simplifi</strong> · QTSP eIDAS</div>
-  <div class="vendor-body">
-    <div class="vendor-card">
-      <h1 style="font-size:20px;font-weight:700;margin-bottom:6px;">Scanează buletinul</h1>
-      <p style="color:var(--c-fog);font-size:13px;">Așază buletinul în cadru. Detectăm automat marginile.</p>
-      <div class="cam-frame">
-        <div class="id-mock"><div class="id-line" style="width:40%;"></div><div class="id-line" style="width:70%;"></div><div class="id-line" style="width:55%;"></div></div>
-        <div class="cam-hint">Aliniază buletinul în cadru</div>
-      </div>
-      <button class="btn btn-accent btn-block btn-lg" onclick="show('kyc-selfie')">Continuă cu selfie</button>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- ════ 8. KYC SELFIE (Simplifi) ════ -->
-<div class="screen" id="screen-kyc-selfie">
-<div class="vendor-page">
-  <div class="vendor-bar">
-    <div class="vendor-brand">calificata.ro<span class="at">@</span>Simplifi</div>
-    <div style="color:#5B7BA8;font-size:12px;">Pas 3 din 4</div>
-  </div>
-  <div class="vendor-strip"><span class="vendor-dot"></span>Verificare identitate securizată prin <strong style="color:#C5D6EE;">Simplifi</strong> · QTSP eIDAS</div>
-  <div class="vendor-body">
-    <div class="vendor-card" style="text-align:center;">
-      <h1 style="font-size:20px;font-weight:700;margin-bottom:6px;">Selfie de verificare</h1>
-      <p style="color:var(--c-fog);font-size:13px;">Privește în cameră. Nu purta ochelari sau pălărie.</p>
-      <div class="selfie-circle"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0116 0"/></svg></div>
-      <div class="liveness-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Fața detectată · liveness check OK</div>
-      <button class="btn btn-accent btn-block btn-lg" onclick="show('kyc-wait')">Trimite la validare</button>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- ════ 9. KYC WAITING ════ -->
-<div class="screen" id="screen-kyc-wait">
-<div class="flow">
-  <div class="flow-card" style="text-align:center;">
-    <div class="spin-wrap"><div class="spin-ring"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></div>
-    <h1>Verificare în curs</h1>
-    <p class="sub">Trimisă către <strong>Simplifi</strong> acum câteva secunde. Un operator verifică buletinul și selfie-ul.</p>
-    <div class="center-chip"><div class="ctx-chip" style="background:var(--c-warn-bg);color:var(--c-warn);">Timp estimat: 2-5 minute</div></div>
-    <p class="sub" style="margin-top:8px;">Vei primi un email cu rezultatul. Poți închide pagina.</p>
-    <button class="btn btn-accent btn-block btn-lg" onclick="show('sign')">Continuă (simulează KYC validat)</button>
-  </div>
-</div>
-</div>
-
-<!-- ════ 10. SIGN (read + OTP) — Rex/Simplifi session ════ -->
-<div class="screen" id="screen-sign">
-<div class="vendor-page">
-  <div class="vendor-bar">
-    <div class="vendor-brand">calificata.ro<span class="at">@</span>Simplifi</div>
-    <div style="color:#5B7BA8;font-size:12px;">Semnare document</div>
-  </div>
-  <div class="vendor-strip"><span class="vendor-dot"></span>Semnătură electronică calificată aplicată prin <strong style="color:#C5D6EE;">Simplifi</strong> · QTSP eIDAS</div>
-  <div class="vendor-body" style="align-items:flex-start;">
-  <div class="sign-shell">
-    <div class="pdf-box">
-      <div class="pdf-head"><span>contract-inchiriere.pdf</span><span class="pg">1 / 1</span></div>
-      <div class="pdf-body" id="pdfScroll" onscroll="onPdfScroll()">
-        <h2>CONTRACT DE ÎNCHIRIERE</h2>
-        <p style="text-align:center;color:#666;font-size:12px;">Încheiat astăzi, 9 iunie 2026</p>
-        <div class="sec">PĂRȚILE CONTRACTANTE</div>
-        <p><strong>1. LOCATORUL:</strong> Andrei Marinescu, domiciliat în București, Str. Aviatorilor nr. 12, sector 1, CNP 1850515123456.</p>
-        <p><strong>2. LOCATARUL:</strong> Mihai Popescu, domiciliat în București, Bd. Magheru nr. 8, sector 1, CNP 1920820789012.</p>
-        <div class="sec">OBIECTUL CONTRACTULUI</div>
-        <p>Art. 1. Locatorul închiriază apartamentul situat în București, Str. Plopilor nr. 5, ap. 23, compus din 2 camere, în suprafață de 56 mp.</p>
-        <p>Art. 2. Durata închirierii este de 12 luni, de la 1 iulie 2026 până la 30 iunie 2027.</p>
-        <div class="sec">CHIRIA ȘI MODALITATEA DE PLATĂ</div>
-        <p>Art. 3. Chiria lunară este de 2.500 lei, plătibilă în avans până în data de 5 a fiecărei luni.</p>
-        <p>Art. 4. La semnarea contractului, Locatarul achită o garanție egală cu o chirie lunară.</p>
-        <div class="sec">OBLIGAȚIILE PĂRȚILOR</div>
-        <p>Art. 5. Locatarul se obligă să folosească imobilul cu diligența unui bun proprietar și să achite la timp utilitățile.</p>
-        <p>Art. 6. Locatorul garantează folosința liniștită a imobilului pe toată durata contractului.</p>
-        <p>Prezentul contract a fost încheiat în 2 exemplare, câte unul pentru fiecare parte, semnate cu semnătură electronică calificată.</p>
-      </div>
-    </div>
-    <div class="otp-card">
-      <div class="scroll-prog"><div class="scroll-prog-fill" id="progFill"></div></div>
-      <div id="readHint" style="font-size:12px;color:var(--c-fog);margin-bottom:14px;">Derulează până la final pentru a putea semna.</div>
-      <div id="otpBlock" class="locked">
-        <h3>Cod de semnare</h3>
-        <p>Am trimis un cod prin SMS la <strong>+40 721 234 567</strong>.</p>
-        <div class="otp"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"></div>
-        <button class="btn btn-accent btn-block btn-lg" onclick="show('success')">Semnează documentul</button>
-        <p class="legal-note">Apăsând „Semnează documentul" aplici o semnătură electronică calificată (QES) conform Regulamentului eIDAS 910/2014, cu valoare juridică deplină.</p>
-      </div>
-    </div>
-  </div>
   </div>
 </div>
 </div>
@@ -597,13 +470,31 @@ function show(s){
   document.getElementById('screen-'+s)?.classList.add('active');
   document.querySelectorAll('#picker button').forEach(b=>b.classList.toggle('active', b.dataset.s===s));
   window.scrollTo(0,0);
-  if(s==='sign'){ resetSign(); }
+  if(s==='transition'){ runTransition(); }
 }
 document.querySelectorAll('#picker button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.s)));
 // open at screen from URL hash (e.g. app.html#login), also on hash change
 (function(){ function fromHash(){ const h=(location.hash||'').replace('#',''); if(h && document.getElementById('screen-'+h)) show(h); } fromHash(); window.addEventListener('hashchange', fromHash); })();
-// demo screen-picker only on localhost; hidden on live (natural flow via buttons)
+// demo screen-picker only on localhost; hidden on live (natural flow)
 (function(){ if(location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){ const p=document.getElementById('picker'); if(p) p.style.display='none'; } })();
+
+// Transition: simulate Rex + vendor (KYC + signing) in the background, then → success
+const CHECK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+let trTimer=null;
+function runTransition(){
+  const steps=[...document.querySelectorAll('#trsteps .step-li')];
+  if(!steps.length) return;
+  if(trTimer) clearTimeout(trTimer);
+  steps.forEach(li=>{ li.querySelector('.step-ico').className='step-ico todo'; li.querySelector('.step-ico').innerHTML=''; li.querySelector('.step-tx').className='step-tx todo'; });
+  let i=0;
+  function step(){
+    if(i>0){ const prev=steps[i-1]; prev.querySelector('.step-ico').className='step-ico done'; prev.querySelector('.step-ico').innerHTML=CHECK_SVG; prev.querySelector('.step-tx').className='step-tx done'; }
+    if(i>=steps.length){ trTimer=setTimeout(()=>{ if(document.getElementById('screen-transition').classList.contains('active')) show('success'); }, 650); return; }
+    const li=steps[i]; li.querySelector('.step-ico').className='step-ico active'; li.querySelector('.step-tx').className='step-tx active';
+    i++; trTimer=setTimeout(step, 850);
+  }
+  trTimer=setTimeout(step, 450);
+}
 
 // sign scroll gate
 function onPdfScroll(){
