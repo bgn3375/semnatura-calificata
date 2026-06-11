@@ -490,16 +490,27 @@ a{color:inherit;}
 const LOGO = `<a class="brand" href="index.html" style="text-decoration:none;"><img src="calificata-logo-full.svg" alt="calificata.ro" style="height:42px;width:auto;display:block;"></a>`;
 document.querySelectorAll('.flow-logo, .side-brand').forEach(el=>{ if(el.textContent.trim()==='LOGO') el.innerHTML=LOGO; });
 
-function show(s){
+// clean-URL routing: /documente, /setari, /login, /plata ...
+const ROUTES={register:'/semneaza',phone:'/telefon',verify:'/verificare',login:'/login',pay:'/plata',transition:'/procesare',success:'/succes',documente:'/documente',setari:'/setari'};
+const PATH2S=Object.fromEntries(Object.entries(ROUTES).map(([s,p])=>[p,s]));
+function show(s, fromRoute){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById('screen-'+s)?.classList.add('active');
   document.querySelectorAll('#picker button').forEach(b=>b.classList.toggle('active', b.dataset.s===s));
   window.scrollTo(0,0);
+  if(!fromRoute && ROUTES[s] && location.pathname!==ROUTES[s]){ history.pushState({s}, '', ROUTES[s]); }
   if(s==='transition'){ runTransition(); }
 }
 document.querySelectorAll('#picker button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.s)));
-// open at screen from URL hash (e.g. app.html#login), also on hash change
-(function(){ function fromHash(){ const h=(location.hash||'').replace('#',''); if(h && document.getElementById('screen-'+h)) show(h); } fromHash(); window.addEventListener('hashchange', fromHash); })();
+// route from URL path (clean URLs), fallback to hash; handle back/forward
+function routeNow(){
+  const p=location.pathname.replace(/\/+$/,'');
+  let s=PATH2S[p];
+  if(!s){ const h=(location.hash||'').replace('#',''); if(h && document.getElementById('screen-'+h)) s=h; }
+  if(s) show(s, true);
+}
+window.addEventListener('popstate', routeNow);
+routeNow();
 // demo screen-picker only on localhost; hidden on live (natural flow)
 (function(){ if(location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){ const p=document.getElementById('picker'); if(p) p.style.display='none'; } })();
 
@@ -545,7 +556,7 @@ document.querySelectorAll('.otp').forEach(grp=>{
 });
 
 // logout → clear hash + back to login
-function logout(){ history.replaceState(null,'',location.pathname); show('login'); }
+function logout(){ show('login'); }
 
 // share modal
 let shareMode='email';

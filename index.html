@@ -367,7 +367,7 @@ a { color: inherit; }
       <a href="#faq">Întrebări</a>
     </div>
     <div class="nav-right">
-      <a href="app.html#login" class="btn btn-outline" style="padding:9px 18px;font-size:13.5px;">Cont</a>
+      <a href="/login" class="btn btn-outline" style="padding:9px 18px;font-size:13.5px;">Cont</a>
     </div>
   </div>
 </nav>
@@ -621,7 +621,7 @@ const MOCKS=[{name:'contract-inchiriere.pdf',size:'1.2 MB',pages:3},{name:'act-a
 const PRICE=5;let files=[],mi=0;
 function addFile(){if(mi>=MOCKS.length)return;files.push({...MOCKS[mi],id:Date.now()});mi++;render();}
 function removeFile(id){files=files.filter(f=>f.id!==id);if(!files.length)mi=0;render();}
-function heroSign(){ if(files.length===0){ addFile(); } else { window.location.href='app.html'; } }
+function heroSign(){ if(files.length===0){ addFile(); } else { window.location.href='/semneaza'; } }
 function render(){
   const z=document.getElementById('upload-zone'),s=document.getElementById('files-state'),l=document.getElementById('file-list');
   if(!files.length){z.style.display='';s.style.display='none';return;}
