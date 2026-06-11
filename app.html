@@ -237,7 +237,28 @@ a{color:inherit;}
 .picker button.active{background:var(--c-accent);color:#fff;}
 .picker button:hover:not(.active){color:#fff;}
 
-@media(max-width:880px){.sign-shell{grid-template-columns:1fr;}.app-shell{grid-template-columns:1fr;}.app-side{display:none;}.acc-grid{grid-template-columns:1fr;}}
+/* topbar mobil pentru paginile de cont (sidebar-ul dispare sub 880px) */
+.app-topbar{display:none;}
+@media(max-width:880px){
+  .sign-shell{grid-template-columns:1fr;}
+  .app-shell{grid-template-columns:1fr;}
+  .app-side{display:none;}
+  .acc-grid{grid-template-columns:1fr;}
+  .app-topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:12px 16px;background:#fff;border-bottom:1px solid var(--c-rule-soft);
+    position:sticky;top:0;z-index:40;
+  }
+  .app-topbar nav{display:flex;gap:4px;align-items:center;}
+  .tb-link{padding:8px 12px;border-radius:var(--r-pill);font-size:13px;font-weight:500;color:var(--c-fog);background:none;border:none;cursor:pointer;}
+  .tb-link.active{background:var(--c-accent-tint);color:var(--c-accent-deep);}
+  .tb-link svg{width:16px;height:16px;display:block;}
+  .app-main{padding:24px 20px 48px;}
+  .app-head{flex-direction:column;align-items:stretch;gap:14px;}
+  .app-head .btn{width:100%;}
+  .doc-row{flex-wrap:wrap;}
+  .doc-actions{margin-left:54px;}
+}
 </style>
 </head>
 <body>
@@ -417,6 +438,14 @@ a{color:inherit;}
 <!-- DOCUMENTE -->
 <div class="screen" id="screen-documente">
 <div class="app-shell">
+  <div class="app-topbar">
+    <a href="/"><img src="calificata-logo-full.svg" alt="calificata.ro" style="height:30px;display:block;"></a>
+    <nav>
+      <button class="tb-link active" onclick="show('documente')">Documente</button>
+      <button class="tb-link" onclick="show('setari')">Setări</button>
+      <button class="tb-link" onclick="logout()" title="Deconectare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </nav>
+  </div>
   <aside class="app-side">
     <div class="side-brand">LOGO</div>
     <nav class="side-nav">
@@ -459,6 +488,14 @@ a{color:inherit;}
 <!-- SETĂRI CONT -->
 <div class="screen" id="screen-setari">
 <div class="app-shell">
+  <div class="app-topbar">
+    <a href="/"><img src="calificata-logo-full.svg" alt="calificata.ro" style="height:30px;display:block;"></a>
+    <nav>
+      <button class="tb-link" onclick="show('documente')">Documente</button>
+      <button class="tb-link active" onclick="show('setari')">Setări</button>
+      <button class="tb-link" onclick="logout()" title="Deconectare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+    </nav>
+  </div>
   <aside class="app-side">
     <div class="side-brand">LOGO</div>
     <nav class="side-nav">
