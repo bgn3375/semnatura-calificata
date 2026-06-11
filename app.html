@@ -240,8 +240,9 @@ a{color:inherit;}
 /* topbar mobil pentru paginile de cont (sidebar-ul dispare sub 880px) */
 .app-topbar{display:none;}
 @media(max-width:880px){
-  .sign-shell{grid-template-columns:1fr;}
-  .app-shell{grid-template-columns:1fr;}
+  .sign-shell{grid-template-columns:minmax(0,1fr);}
+  .app-shell{grid-template-columns:minmax(0,1fr);}
+  .app-main{min-width:0;}
   .app-side{display:none;}
   .acc-grid{grid-template-columns:1fr;}
   .app-topbar{
@@ -439,7 +440,7 @@ a{color:inherit;}
 <div class="screen" id="screen-documente">
 <div class="app-shell">
   <div class="app-topbar">
-    <a href="/"><img src="calificata-logo-full.svg" alt="calificata.ro" style="height:30px;display:block;"></a>
+    <a href="/" style="flex-shrink:0;"><img src="calificata-seal.svg" alt="calificata.ro" style="height:32px;width:32px;display:block;"></a>
     <nav>
       <button class="tb-link active" onclick="show('documente')">Documente</button>
       <button class="tb-link" onclick="show('setari')">Setări</button>
@@ -489,7 +490,7 @@ a{color:inherit;}
 <div class="screen" id="screen-setari">
 <div class="app-shell">
   <div class="app-topbar">
-    <a href="/"><img src="calificata-logo-full.svg" alt="calificata.ro" style="height:30px;display:block;"></a>
+    <a href="/" style="flex-shrink:0;"><img src="calificata-seal.svg" alt="calificata.ro" style="height:32px;width:32px;display:block;"></a>
     <nav>
       <button class="tb-link" onclick="show('documente')">Documente</button>
       <button class="tb-link active" onclick="show('setari')">Setări</button>
