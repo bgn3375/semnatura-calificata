@@ -339,20 +339,35 @@ a{color:inherit;}
   <div class="flow-card">
     <div class="flow-logo">LOGO</div>
     <h1>Plată</h1>
-    <p class="sub">Plătești acum, semnezi imediat după.</p>
-    <div style="background:var(--c-gray-50);border-radius:var(--r-md);padding:14px 16px;margin-bottom:20px;">
+    <p class="sub" id="paySub">Plătești acum, semnezi imediat după.</p>
+    <div style="background:var(--c-gray-50);border-radius:var(--r-md);padding:14px 16px;margin-bottom:14px;">
       <div class="sum-row"><span class="k">contract-inchiriere.pdf</span><span class="v">5,00 lei</span></div>
-      <div class="sum-total"><span class="k">Total</span><span class="v">5<span class="u"> lei</span></span></div>
+      <div class="sum-row" id="discountRow" style="display:none;"><span class="k" id="discountLabel">Cod aplicat</span><span class="v" id="discountVal" style="color:var(--c-success);">-5,00 lei</span></div>
+      <div class="sum-total"><span class="k">Total</span><span class="v" id="payTotal">5<span class="u"> lei</span></span></div>
     </div>
-    <div class="field"><label class="label">Nume pe card</label><input class="input" value="MIHAI POPESCU"></div>
-    <div class="field"><label class="label">Număr card</label><input class="input mono" value="4242 4242 4242 4242"></div>
-    <div class="row-2">
-      <div class="field"><label class="label">Expirare</label><input class="input mono" value="12 / 28"></div>
-      <div class="field"><label class="label">CVC</label><input class="input mono" value="123"></div>
+    <div id="voucherZone" style="margin-bottom:18px;">
+      <button id="voucherToggle" onclick="toggleVoucher()" style="background:none;border:none;color:var(--c-accent);font-size:12.5px;font-weight:500;cursor:pointer;padding:0;">Ai un cod de reducere?</button>
+      <div id="voucherForm" style="display:none;gap:8px;margin-top:10px;">
+        <input class="input" id="voucherInput" placeholder="Codul tău" style="flex:1;text-transform:uppercase;" onkeydown="if(event.key==='Enter')applyVoucher()">
+        <button class="btn btn-outline" style="padding:11px 18px;font-size:13.5px;flex-shrink:0;" onclick="applyVoucher()">Aplică</button>
+      </div>
+      <div id="voucherErr" style="display:none;color:var(--c-error);font-size:12.5px;margin-top:8px;">Cod invalid sau expirat.</div>
+      <div id="voucherApplied" style="display:none;align-items:center;gap:10px;margin-top:10px;">
+        <span class="ctx-chip" style="margin:0;background:var(--c-success-bg);color:var(--c-success);" id="voucherChip">SOLO · gratuit</span>
+        <button onclick="removeVoucher()" style="background:none;border:none;color:var(--c-fog);font-size:12.5px;cursor:pointer;padding:0;">Șterge</button>
+      </div>
     </div>
-    <div class="checkrow"><input type="checkbox" id="sv" checked><label for="sv">Salvează cardul pentru semnări viitoare</label></div>
-    <button class="btn btn-accent btn-block btn-lg" onclick="show('transition')">Plătește 5 lei</button>
-    <div class="muted-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Plată securizată prin Stripe · 3D Secure</div>
+    <div id="cardSection">
+      <div class="field"><label class="label">Nume pe card</label><input class="input" value="MIHAI POPESCU"></div>
+      <div class="field"><label class="label">Număr card</label><input class="input mono" value="4242 4242 4242 4242"></div>
+      <div class="row-2">
+        <div class="field"><label class="label">Expirare</label><input class="input mono" value="12 / 28"></div>
+        <div class="field"><label class="label">CVC</label><input class="input mono" value="123"></div>
+      </div>
+      <div class="checkrow"><input type="checkbox" id="sv" checked><label for="sv">Salvează cardul pentru semnări viitoare</label></div>
+    </div>
+    <button class="btn btn-accent btn-block btn-lg" id="payBtn" onclick="show('transition')">Plătește 5 lei</button>
+    <div class="muted-foot" id="payFoot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Plată securizată prin Stripe · 3D Secure</div>
   </div>
 </div>
 </div>
@@ -557,6 +572,45 @@ document.querySelectorAll('.otp').forEach(grp=>{
 
 // logout → clear hash + back to login
 function logout(){ show('login'); }
+
+// Voucher (demo F5): SOLO = gratuit 100%, BONO50 = -50%. Total 0 → sare peste procesator.
+const VOUCHERS={ 'SOLO':{type:'percent',value:100,label:'SOLO · gratuit'}, 'BONO50':{type:'percent',value:50,label:'BONO50 · -50%'} };
+const PAY_BASE=5; let voucher=null;
+function fmtLei(n){ return (Number.isInteger(n)? n : n.toFixed(2).replace('.',',')) + ' lei'; }
+function toggleVoucher(){
+  const f=document.getElementById('voucherForm');
+  f.style.display = f.style.display==='none' ? 'flex' : 'none';
+  document.getElementById('voucherErr').style.display='none';
+  if(f.style.display==='flex') document.getElementById('voucherInput').focus();
+}
+function applyVoucher(){
+  const code=(document.getElementById('voucherInput').value||'').trim().toUpperCase();
+  const v=VOUCHERS[code];
+  if(!v){ document.getElementById('voucherErr').style.display='block'; return; }
+  voucher={code,...v}; renderPay();
+}
+function removeVoucher(){ voucher=null; document.getElementById('voucherInput').value=''; renderPay(); }
+function renderPay(){
+  const discount = voucher ? PAY_BASE*voucher.value/100 : 0;
+  const total = Math.max(0, PAY_BASE-discount);
+  document.getElementById('discountRow').style.display = voucher ? 'flex' : 'none';
+  if(voucher){
+    document.getElementById('discountLabel').textContent = 'Cod ' + voucher.code;
+    document.getElementById('discountVal').textContent = '-' + (Number.isInteger(discount)? discount+',00' : discount.toFixed(2).replace('.',',')) + ' lei';
+    document.getElementById('voucherChip').textContent = voucher.label;
+  }
+  document.getElementById('payTotal').innerHTML = (Number.isInteger(total)? total : total.toFixed(2).replace('.',',')) + '<span class="u"> lei</span>';
+  document.getElementById('voucherForm').style.display='none';
+  document.getElementById('voucherErr').style.display='none';
+  document.getElementById('voucherToggle').style.display = voucher ? 'none' : '';
+  document.getElementById('voucherApplied').style.display = voucher ? 'flex' : 'none';
+  // total 0 → fără procesator: ascundem cardul, butonul devine „Continuă"
+  const zero = total===0;
+  document.getElementById('cardSection').style.display = zero ? 'none' : '';
+  document.getElementById('payFoot').style.display = zero ? 'none' : 'flex';
+  document.getElementById('payBtn').textContent = zero ? 'Continuă' : 'Plătește ' + fmtLei(total);
+  document.getElementById('paySub').textContent = zero ? 'Nimic de plătit — codul acoperă integral semnarea.' : 'Plătești acum, semnezi imediat după.';
+}
 
 // share modal
 let shareMode='email';
