@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listă de așteptare · calificata.ro</title>
+<link rel="icon" href="calificata-seal.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--accent:#1340FF;--ink:#08142E;--fog:#64748B;--mist:#94A3B8;--rule:rgba(15,23,42,.10);--gray:#F8FAFC;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--gray);padding:40px 24px;}
+  .wrap{max-width:860px;margin:0 auto;}
+  h1{font-size:24px;letter-spacing:-.02em;margin-bottom:4px;}
+  .sub{color:var(--fog);font-size:14px;margin-bottom:24px;}
+  .bar{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap;}
+  input{padding:10px 14px;border:1px solid var(--rule);border-radius:10px;font-size:14px;font-family:inherit;min-width:240px;}
+  button{padding:10px 18px;border:none;border-radius:999px;background:var(--accent);color:#fff;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;}
+  button.ghost{background:#fff;color:var(--ink);border:1px solid var(--rule);}
+  .count{font-size:14px;color:var(--fog);margin-left:auto;}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--rule);border-radius:14px;overflow:hidden;}
+  th,td{text-align:left;padding:12px 16px;font-size:14px;border-bottom:1px solid var(--rule);}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mist);font-weight:600;}
+  tr:last-child td{border-bottom:none;}
+  td.mono{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--fog);}
+  .empty{color:var(--mist);padding:40px;text-align:center;}
+  .err{color:#DC2626;font-size:14px;margin-top:12px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Listă de așteptare</h1>
+  <p class="sub">Cei care s-au înscris să fie anunțați la lansare.</p>
+  <div class="bar">
+    <input id="key" type="password" placeholder="Cheie admin">
+    <button onclick="load()">Vezi lista</button>
+    <button class="ghost" onclick="exportCsv()">Export CSV</button>
+    <span class="count" id="count"></span>
+  </div>
+  <div id="out"></div>
+  <div class="err" id="err" style="display:none;"></div>
+</div>
+<script>
+  let rows=[];
+  const qkey=new URLSearchParams(location.search).get('key'); if(qkey)document.getElementById('key').value=qkey;
+  async function load(){
+    const key=document.getElementById('key').value.trim();
+    const err=document.getElementById('err'); err.style.display='none';
+    if(!key){err.textContent='Introdu cheia admin.';err.style.display='block';return;}
+    try{
+      const r=await fetch('/api/list?key='+encodeURIComponent(key));
+      if(r.status===401){err.textContent='Cheie greșită.';err.style.display='block';return;}
+      if(!r.ok)throw new Error();
+      const d=await r.json(); rows=d.signups||[];
+      document.getElementById('count').textContent=d.count+' înscriși';
+      render();
+    }catch(e){err.textContent='Eroare la încărcare.';err.style.display='block';}
+  }
+  function render(){
+    const out=document.getElementById('out');
+    if(!rows.length){out.innerHTML='<div class="empty">Niciun înscris încă.</div>';return;}
+    out.innerHTML='<table><thead><tr><th>Email</th><th>Sursă</th><th>Data</th></tr></thead><tbody>'+
+      rows.map(r=>`<tr><td>${esc(r.email)}</td><td class="mono">${esc(r.source||'')}</td><td class="mono">${fmt(r.ts)}</td></tr>`).join('')+
+      '</tbody></table>';
+  }
+  function esc(s){return String(s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
+  function fmt(ts){try{return new Date(ts).toLocaleString('ro-RO');}catch{return ts;}}
+  function exportCsv(){
+    if(!rows.length){alert('Încarcă lista mai întâi.');return;}
+    const csv='email,sursa,data\n'+rows.map(r=>`${r.email},${r.source||''},${r.ts}`).join('\n');
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+    a.download='lista-asteptare-calificata.csv';a.click();
+  }
+  if(qkey)load();
+</script>
+</body>
+</html>

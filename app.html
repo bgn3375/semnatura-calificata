@@ -287,23 +287,26 @@ a{color:inherit;}
 <div class="flow">
   <div class="flow-card">
     <div class="flow-logo">LOGO</div>
-    <div class="center-chip"><div class="ctx-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>1 document de semnat · 5 lei</div></div>
-    <h1>Creează cont</h1>
-    <p class="sub">Începi gratuit. Plătești doar când semnezi.</p>
+    <div class="center-chip"><div class="ctx-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Documentul tău e pregătit</div></div>
+    <h1>Suntem aproape gata</h1>
+    <p class="sub">Punem ultimele detalii la punct înainte de lansare. Lasă-ți emailul și te anunțăm primul când poți semna — cu o ofertă de început.</p>
 
-    <button class="google-btn" onclick="show('phone')">
-      <svg class="g-ico" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 13.2 4.5 4.5 13.2 4.5 24S13.2 43.5 24 43.5 43.5 34.8 43.5 24c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 16.3 4.5 9.7 8.9 6.3 14.7z"/><path fill="#4CAF50" d="M24 43.5c5.4 0 10.3-2 13.9-5.3l-6.4-5.4c-2 1.5-4.6 2.4-7.5 2.4-5.2 0-9.6-3.3-11.2-7.9l-6.5 5C9.6 39 16.2 43.5 24 43.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4 5.4l6.4 5.4c-.5.4 6.8-5 6.8-14.8 0-1.2-.1-2.3-.4-3.5z"/></svg>
-      Continuă cu Google
-    </button>
-    <div class="divider">sau cu email</div>
+    <div class="field"><label class="label">Email</label><input id="wl-email" class="input" type="email" placeholder="numele.tau@email.ro" autocomplete="email" inputmode="email"></div>
+    <button class="btn btn-accent btn-block btn-lg" id="wl-btn" onclick="joinWaitlist()">Anunță-mă la lansare</button>
+    <div id="wl-error" style="display:none;color:var(--c-error,#DC2626);font-size:13px;margin-top:12px;text-align:center;"></div>
+    <div class="flow-foot">Te anunțăm o singură dată, fără spam.</div>
+  </div>
+</div>
+</div>
 
-    <div class="field"><label class="label">Email</label><input class="input" type="email" placeholder="numele.tau@email.ro" value="mihai.popescu@gmail.com"></div>
-    <div class="field"><label class="label">Parolă</label><input class="input" type="password" placeholder="Min. 8 caractere" value="••••••••••"></div>
-    <div class="field"><label class="label">Telefon</label><input class="input" type="tel" placeholder="07XX XXX XXX" value="0721 234 567"><div class="field-hint">Necesar pentru a semna cu cod OTP pe SMS.</div></div>
-
-    <div class="checkrow"><input type="checkbox" id="t" checked><label for="t">Sunt de acord cu <a href="#">Termenii</a> și <a href="#">Politica GDPR</a>.</label></div>
-    <button class="btn btn-accent btn-block btn-lg" onclick="show('verify')">Continuă</button>
-    <div class="flow-foot">Ai deja cont? <a href="#" onclick="show('login');return false;">Intră în cont</a></div>
+<!-- ════ 1c. WAITLIST — mulțumire (în loc de plată, până la lansare) ════ -->
+<div class="screen" id="screen-waitlist">
+<div class="flow">
+  <div class="flow-card" style="text-align:center;">
+    <div class="success-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h1>Mulțumim! Ești pe listă.</h1>
+    <p class="sub">Te anunțăm pe email imediat ce lansăm. Suntem foarte aproape — îți mulțumim pentru interes.</p>
+    <a class="btn btn-outline btn-block" href="/" style="margin-top:8px;">Înapoi la pagina principală</a>
   </div>
 </div>
 </div>
@@ -549,7 +552,7 @@ const LOGO = `<a class="brand" href="/" style="text-decoration:none;"><img src="
 document.querySelectorAll('.flow-logo, .side-brand').forEach(el=>{ if(el.textContent.trim()==='LOGO') el.innerHTML=LOGO; });
 
 // clean-URL routing: /documente, /setari, /login, /plata ...
-const ROUTES={register:'/semneaza',phone:'/telefon',verify:'/verificare',login:'/login',pay:'/plata',transition:'/procesare',success:'/succes',documente:'/documente',setari:'/setari'};
+const ROUTES={register:'/semneaza',waitlist:'/multumim',phone:'/telefon',verify:'/verificare',login:'/login',pay:'/plata',transition:'/procesare',success:'/succes',documente:'/documente',setari:'/setari'};
 const PATH2S=Object.fromEntries(Object.entries(ROUTES).map(([s,p])=>[p,s]));
 function show(s, fromRoute){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
@@ -560,6 +563,27 @@ function show(s, fromRoute){
   if(s==='transition'){ runTransition(); }
 }
 document.querySelectorAll('#picker button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.s)));
+
+// Listă de așteptare (pre-lansare): colectează emailul, apoi ecranul de mulțumire.
+async function joinWaitlist(){
+  const input=document.getElementById('wl-email');
+  const err=document.getElementById('wl-error');
+  const btn=document.getElementById('wl-btn');
+  const email=(input.value||'').trim();
+  err.style.display='none';
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    err.textContent='Te rugăm introdu o adresă de email validă.'; err.style.display='block'; input.focus(); return;
+  }
+  btn.disabled=true; const orig=btn.textContent; btn.textContent='Se trimite…';
+  try{
+    const r=await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,source:'app'})});
+    if(!r.ok) throw new Error('fail');
+    show('waitlist');
+  }catch(e){
+    err.textContent='Ceva n-a mers. Mai încearcă o dată sau scrie-ne la semneaza@calificata.ro.'; err.style.display='block';
+    btn.disabled=false; btn.textContent=orig;
+  }
+}
 // route from URL path (clean URLs), fallback to hash; handle back/forward
 function routeNow(){
   const p=location.pathname.replace(/\/+$/,'');

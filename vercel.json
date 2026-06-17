@@ -1,5 +1,5 @@
 {
   "rewrites": [
-    { "source": "/(documente|setari|login|semneaza|plata|procesare|succes|verificare|telefon)", "destination": "/app.html" }
+    { "source": "/(documente|setari|login|semneaza|multumim|plata|procesare|succes|verificare|telefon)", "destination": "/app.html" }
   ]
 }
