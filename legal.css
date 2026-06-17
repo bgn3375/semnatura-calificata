@@ -1,0 +1,43 @@
+/* calificata.ro — stil pagini legale (Termeni, Confidențialitate) */
+:root{
+  --c-accent:#1340FF; --c-ink:#08142E; --c-fog:#475569; --c-mist:#94A3B8;
+  --c-rule:rgba(15,23,42,.10); --c-bg:#F8FAFC; --c-white:#FFFFFF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-family:'Inter',system-ui,sans-serif;font-size:16px;color:var(--c-ink);-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{background:var(--c-bg);line-height:1.65}
+a{color:var(--c-accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.lg-nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--c-rule)}
+.lg-nav-in{max-width:820px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.lg-brand{display:flex;align-items:center;gap:10px}
+.lg-brand img{height:32px;width:32px;display:block}
+.lg-brand b{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.lg-back{font-size:13.5px;font-weight:500;color:var(--c-fog)}
+
+.lg-wrap{max-width:820px;margin:0 auto;padding:56px 24px 40px}
+.lg-doc{background:var(--c-white);border:1px solid var(--c-rule);border-radius:18px;padding:48px 52px}
+.lg-eyebrow{font-size:11px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--c-accent);margin-bottom:14px}
+.lg-doc h1{font-size:34px;font-weight:700;letter-spacing:-.025em;line-height:1.15;margin-bottom:10px}
+.lg-meta{font-size:13.5px;color:var(--c-mist);margin-bottom:8px}
+.lg-intro{font-size:16px;color:var(--c-fog);margin:18px 0 8px;padding-bottom:24px;border-bottom:1px solid var(--c-rule)}
+.lg-doc h2{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:34px 0 12px;padding-top:6px}
+.lg-doc h2 .n{color:var(--c-mist);font-weight:600;margin-right:8px}
+.lg-doc h3{font-size:15.5px;font-weight:600;margin:20px 0 8px}
+.lg-doc p{font-size:15px;color:var(--c-fog);margin-bottom:12px}
+.lg-doc ul{margin:8px 0 14px;padding-left:22px}
+.lg-doc li{font-size:15px;color:var(--c-fog);margin-bottom:7px}
+.lg-doc strong{color:var(--c-ink);font-weight:600}
+.lg-box{background:var(--c-bg);border:1px solid var(--c-rule);border-radius:12px;padding:18px 20px;margin:18px 0}
+.lg-box p{margin-bottom:6px;font-size:14px}
+.lg-box .lg-k{color:var(--c-mist);font-size:12.5px}
+
+.lg-foot{max-width:820px;margin:0 auto;padding:24px;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between;color:var(--c-mist);font-size:13px}
+.lg-foot a{color:var(--c-fog);font-weight:500}
+
+@media(max-width:640px){
+  .lg-doc{padding:32px 22px;border-radius:14px}
+  .lg-doc h1{font-size:27px}
+  .lg-wrap{padding:32px 14px}
+}
