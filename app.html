@@ -589,7 +589,15 @@ function routeNow(){
   const p=location.pathname.replace(/\/+$/,'');
   let s=PATH2S[p];
   if(!s){ const h=(location.hash||'').replace('#',''); if(h && document.getElementById('screen-'+h)) s=h; }
-  if(s) show(s, true);
+  // PRE-LANSARE: singurele ecrane publice sunt înscrierea (waitlist) și mulțumirea.
+  // Orice altă rută (login, plata, documente, telefon…) → ecranul de înscriere.
+  const ALLOWED=new Set(['register','waitlist']);
+  if(!s || !ALLOWED.has(s)){
+    if(location.pathname!=='/semneaza'){ history.replaceState({s:'register'},'','/semneaza'); }
+    show('register', true);
+    return;
+  }
+  show(s, true);
 }
 window.addEventListener('popstate', routeNow);
 routeNow();
