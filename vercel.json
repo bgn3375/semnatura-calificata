@@ -1,4 +1,7 @@
 {
+  "redirects": [
+    { "source": "/", "has": [{ "type": "host", "value": "romania.calificata.ro" }], "destination": "/romania.html", "permanent": false }
+  ],
   "rewrites": [
     { "source": "/(.*)", "has": [{ "type": "host", "value": "romania.calificata.ro" }], "destination": "/romania.html" },
     { "source": "/termeni", "destination": "/termeni.html" },

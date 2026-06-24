@@ -26,6 +26,17 @@
   .wrap{max-width:880px;margin:0 auto;padding:0 16px}
   a{color:inherit}
 
+  .promo{display:flex;align-items:center;justify-content:center;gap:8px 16px;flex-wrap:wrap;
+    background:linear-gradient(100deg,#1340FF 0%,#4A26F4 100%);color:#fff;text-decoration:none;
+    padding:11px 18px;font-size:14px;line-height:1.45;text-align:center;font-weight:500;
+    letter-spacing:.01em;transition:filter .15s}
+  .promo:hover{filter:brightness(1.09)}
+  .promo b{font-weight:800}
+  .promo-cta{display:inline-flex;align-items:center;background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.3);padding:5px 13px;border-radius:999px;
+    font-weight:700;font-size:13px;white-space:nowrap}
+  @media(max-width:560px){.promo{font-size:13px;padding:10px 14px}}
+
   .topbar{background:var(--bg2);border-bottom:1px solid var(--line2)}
   .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:52px}
   .tb-left{display:flex;align-items:center;gap:12px;font-weight:700;font-size:14px;color:#fff}
@@ -128,6 +139,11 @@
 </style>
 </head>
 <body>
+
+<a class="promo" href="https://semnatura.calificata.ro" target="_blank" rel="noopener">
+  <span class="promo-txt"><b>Semnează orice document</b> cu semnătură calificată în câteva secunde, cu doar <b>5 lei</b>!</span>
+  <span class="promo-cta">semnatura.calificata.ro&nbsp;→</span>
+</a>
 
 <div class="topbar"><div class="wrap">
   <div class="tb-left"><span class="tb-badge">CM 2026</span> Cupa Mondială · SUA · Canada · Mexic</div>
