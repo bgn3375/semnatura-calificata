@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>România · Grupa D · Cupa Mondială 2026</title>
+<meta name="description" content="Grupa D la Cupa Mondială 2026: clasament și meciuri. România, neînvinsă după două etape.">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="România · Grupa D · Cupa Mondială 2026">
+<meta property="og:description" content="România conduce Grupa D — 2 victorii din 2. Clasament și program.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#0B8A3D; --green-d:#076b2f; --ink:#0B1220; --fog:#5B6473; --mist:#9AA3B2;
+    --line:#E6E9EF; --bg:#F4F6F9; --white:#fff; --gold:#E8B007;
+    --ro1:#002B7F; --ro2:#FCD116; --ro3:#CE1126; /* tricolor */
+    --live:#E11D2E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{font-family:'Inter',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  body{background:var(--bg)}
+  .wrap{max-width:880px;margin:0 auto;padding:0 16px}
+  a{color:inherit}
+
+  /* top bar */
+  .topbar{background:var(--ink);color:#fff}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:52px}
+  .tb-left{display:flex;align-items:center;gap:12px;font-weight:700;font-size:14px;letter-spacing:.02em}
+  .tb-badge{background:linear-gradient(90deg,var(--green),var(--green-d));font-size:11px;font-weight:700;padding:4px 9px;border-radius:5px;letter-spacing:.06em}
+  .tb-right{font-size:12px;color:var(--mist)}
+
+  /* hero */
+  .hero{background:linear-gradient(120deg,#0B1220 0%,#13233f 55%,#0e2a52 100%);color:#fff;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-60px;top:-40px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(252,209,22,.18),transparent 70%)}
+  .hero .wrap{padding:30px 16px 26px;position:relative;z-index:1}
+  .hero-tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9fc6ff;margin-bottom:14px}
+  .hero-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .hero-flag{width:72px;height:54px;border-radius:6px;box-shadow:0 6px 18px rgba(0,0,0,.35);display:block}
+  .hero h1{font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1}
+  .hero-sub{font-size:14px;color:#c7d2e0;margin-top:6px}
+  .hero-stats{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .stat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 16px;min-width:78px}
+  .stat b{display:block;font-size:22px;font-weight:800;line-height:1}
+  .stat span{font-size:11px;color:#aebacb;letter-spacing:.04em}
+  .stat.win b{color:#46d98a}
+
+  /* sections */
+  .sec{margin:22px 0}
+  .sec-h{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--fog);margin:0 2px 12px}
+  .sec-h::before{content:"";width:4px;height:15px;background:var(--green);border-radius:2px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+
+  /* next match banner */
+  .next{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--live);border-radius:14px;padding:16px 18px}
+  .next-top{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--live);margin-bottom:12px}
+  .next-dot{width:8px;height:8px;border-radius:50%;background:var(--live);animation:pulse 1.4s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .next-teams{display:flex;align-items:center;justify-content:center;gap:18px}
+  .nt-team{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
+  .nt-team img{width:34px;height:25px;border-radius:4px;display:block}
+  .nt-vs{font-size:13px;font-weight:700;color:var(--mist)}
+  .next-meta{text-align:center;font-size:13px;color:var(--fog);margin-top:12px}
+  .next-meta b{color:var(--ink)}
+
+  /* standings table */
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  thead th{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--mist);text-transform:uppercase;padding:12px 6px;text-align:center;border-bottom:1px solid var(--line)}
+  thead th.team{text-align:left;padding-left:14px}
+  tbody td{padding:13px 6px;text-align:center;border-bottom:1px solid var(--line)}
+  tbody tr:last-child td{border-bottom:none}
+  td.team{text-align:left;padding-left:10px}
+  .team-cell{display:flex;align-items:center;gap:10px}
+  .pos{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+  .pos.q{background:var(--green)} .pos.o{background:var(--mist)}
+  .team-cell img{width:26px;height:20px;border-radius:3px;display:block;flex-shrink:0}
+  .team-cell .nm{font-weight:600}
+  .pts{font-weight:800}
+  tr.ro{background:linear-gradient(90deg,rgba(252,209,22,.10),rgba(206,17,38,.05))}
+  tr.ro .nm{color:var(--ink);font-weight:800}
+  .qnote{display:flex;gap:18px;padding:11px 14px;font-size:12px;color:var(--fog);background:#fbfcfe;border-top:1px solid var(--line)}
+  .qnote span{display:flex;align-items:center;gap:6px}
+  .qdot{width:9px;height:9px;border-radius:50%}
+  .gd-pos{color:var(--green)} .gd-neg{color:#c0392b}
+
+  /* matches */
+  .md-group{margin-bottom:8px}
+  .md-date{font-size:12px;font-weight:600;color:var(--mist);padding:14px 4px 8px;letter-spacing:.02em}
+  .match{display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+  .match:last-child{border-bottom:none}
+  .match.ro{background:linear-gradient(90deg,rgba(252,209,22,.08),transparent)}
+  .m-side{flex:1;display:flex;align-items:center;gap:9px}
+  .m-side.home{justify-content:flex-end;text-align:right}
+  .m-side img{width:24px;height:18px;border-radius:3px;display:block}
+  .m-side .nm{font-size:14px;font-weight:600}
+  .m-side .nm.b{font-weight:800}
+  .m-score{min-width:64px;text-align:center;font-weight:800;font-size:16px}
+  .m-score .fin{color:var(--ink)}
+  .m-score .soon{font-size:12px;font-weight:600;color:var(--fog);background:var(--bg);padding:4px 8px;border-radius:6px}
+  .m-venue{font-size:11px;color:var(--mist);text-align:center;padding:2px 14px 0}
+  .win-tag{font-size:10px;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:middle}
+
+  footer{text-align:center;padding:30px 16px 40px;color:var(--mist);font-size:12px;line-height:1.6}
+  footer a{color:var(--fog);font-weight:600;text-decoration:none}
+
+  @media(max-width:560px){
+    .hero h1{font-size:32px}
+    .hero-flag{width:60px;height:45px}
+    thead th.hide,td.hide{display:none}
+    .next-teams{gap:10px}.nt-team{font-size:15px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="wrap">
+  <div class="tb-left"><span class="tb-badge">CM 2026</span> Cupa Mondială · SUA · Canada · Mexic</div>
+  <div class="tb-right">Grupa D</div>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <div class="hero-tag">● Grupa D · Etapa 2 din 3</div>
+  <div class="hero-row">
+    <img class="hero-flag" src="https://flagcdn.com/w160/ro.png" width="72" height="54" alt="Steagul României" loading="eager">
+    <div>
+      <h1>România</h1>
+      <div class="hero-sub">Neînvinsă · calificare ca și asigurată în optimi</div>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat win"><b>2</b><span>VICTORII</span></div>
+    <div class="stat"><b>0</b><span>EGALURI</span></div>
+    <div class="stat"><b>0</b><span>ÎNFRÂNGERI</span></div>
+    <div class="stat"><b>6</b><span>PUNCTE</span></div>
+    <div class="stat"><b>5:1</b><span>GOLAVERAJ</span></div>
+  </div>
+</div></header>
+
+<main class="wrap">
+
+  <section class="sec">
+    <div class="next">
+      <div class="next-top"><span class="next-dot"></span>Urmează · meci decisiv pentru locul 1</div>
+      <div class="next-teams">
+        <div class="nt-team"><img src="https://flagcdn.com/w80/ro.png" width="34" height="25" alt="România"> România</div>
+        <div class="nt-vs">VS</div>
+        <div class="nt-team">Statele Unite <img src="https://flagcdn.com/w80/us.png" width="34" height="25" alt="Statele Unite"></div>
+      </div>
+      <div class="next-meta"><b>Joi, 25 iunie 2026 · 22:00</b> (ora României) · SoFi Stadium, Los Angeles</div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h">Clasament · Grupa D</div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th class="team">Echipă</th>
+            <th>M</th><th class="hide">V</th><th class="hide">E</th><th class="hide">Î</th>
+            <th class="hide">GM</th><th class="hide">GP</th><th>GD</th><th>Pct</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ro">
+            <td class="team"><div class="team-cell"><span class="pos q">1</span><img src="https://flagcdn.com/w40/ro.png" width="26" height="20" alt=""><span class="nm">România</span></div></td>
+            <td>2</td><td class="hide">2</td><td class="hide">0</td><td class="hide">0</td><td class="hide">5</td><td class="hide">1</td><td class="gd-pos">+4</td><td class="pts">6</td>
+          </tr>
+          <tr>
+            <td class="team"><div class="team-cell"><span class="pos q">2</span><img src="https://flagcdn.com/w40/us.png" width="26" height="20" alt=""><span class="nm">Statele Unite</span></div></td>
+            <td>2</td><td class="hide">2</td><td class="hide">0</td><td class="hide">0</td><td class="hide">4</td><td class="hide">1</td><td class="gd-pos">+3</td><td class="pts">6</td>
+          </tr>
+          <tr>
+            <td class="team"><div class="team-cell"><span class="pos o">3</span><img src="https://flagcdn.com/w40/py.png" width="26" height="20" alt=""><span class="nm">Paraguay</span></div></td>
+            <td>2</td><td class="hide">0</td><td class="hide">0</td><td class="hide">2</td><td class="hide">1</td><td class="hide">4</td><td class="gd-neg">−3</td><td class="pts">0</td>
+          </tr>
+          <tr>
+            <td class="team"><div class="team-cell"><span class="pos o">4</span><img src="https://flagcdn.com/w40/au.png" width="26" height="20" alt=""><span class="nm">Australia</span></div></td>
+            <td>2</td><td class="hide">0</td><td class="hide">0</td><td class="hide">2</td><td class="hide">1</td><td class="hide">5</td><td class="gd-neg">−4</td><td class="pts">0</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="qnote">
+        <span><span class="qdot" style="background:var(--green)"></span>Calificare în optimi</span>
+        <span><span class="qdot" style="background:var(--mist)"></span>Eliminată</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h">Meciurile grupei</div>
+    <div class="card">
+      <div class="md-date">Vineri, 12 iunie · Etapa 1</div>
+      <div class="match">
+        <div class="m-side home"><span class="nm">Statele Unite</span><img src="https://flagcdn.com/w40/us.png" width="24" height="18" alt=""></div>
+        <div class="m-score"><span class="fin">2 – 1</span></div>
+        <div class="m-side"><img src="https://flagcdn.com/w40/py.png" width="24" height="18" alt=""><span class="nm">Paraguay</span></div>
+      </div>
+      <div class="m-venue">SoFi Stadium, Los Angeles</div>
+
+      <div class="md-date">Sâmbătă, 13 iunie · Etapa 1</div>
+      <div class="match ro">
+        <div class="m-side home"><span class="nm b">România</span><img src="https://flagcdn.com/w40/ro.png" width="24" height="18" alt=""></div>
+        <div class="m-score"><span class="fin">3 – 1</span></div>
+        <div class="m-side"><img src="https://flagcdn.com/w40/au.png" width="24" height="18" alt=""><span class="nm">Australia</span></div>
+      </div>
+      <div class="m-venue">BC Place, Vancouver · <span style="color:var(--green);font-weight:600">Victorie</span></div>
+
+      <div class="md-date">Vineri, 19 iunie · Etapa 2</div>
+      <div class="match">
+        <div class="m-side home"><span class="nm">Statele Unite</span><img src="https://flagcdn.com/w40/us.png" width="24" height="18" alt=""></div>
+        <div class="m-score"><span class="fin">2 – 0</span></div>
+        <div class="m-side"><img src="https://flagcdn.com/w40/au.png" width="24" height="18" alt=""><span class="nm">Australia</span></div>
+      </div>
+      <div class="m-venue">Lumen Field, Seattle</div>
+      <div class="match ro">
+        <div class="m-side home"><span class="nm b">România</span><img src="https://flagcdn.com/w40/ro.png" width="24" height="18" alt=""></div>
+        <div class="m-score"><span class="fin">2 – 0</span></div>
+        <div class="m-side"><img src="https://flagcdn.com/w40/py.png" width="24" height="18" alt=""><span class="nm">Paraguay</span></div>
+      </div>
+      <div class="m-venue">Levi's Stadium, Santa Clara · <span style="color:var(--green);font-weight:600">Victorie</span></div>
+
+      <div class="md-date">Joi, 25 iunie · Etapa 3</div>
+      <div class="match ro">
+        <div class="m-side home"><span class="nm b">România</span><img src="https://flagcdn.com/w40/ro.png" width="24" height="18" alt=""></div>
+        <div class="m-score"><span class="soon">22:00</span></div>
+        <div class="m-side"><img src="https://flagcdn.com/w40/us.png" width="24" height="18" alt=""><span class="nm">Statele Unite</span></div>
+      </div>
+      <div class="m-venue">SoFi Stadium, Los Angeles</div>
+      <div class="match">
+        <div class="m-side home"><span class="nm">Paraguay</span><img src="https://flagcdn.com/w40/py.png" width="24" height="18" alt=""></div>
+        <div class="m-score"><span class="soon">22:00</span></div>
+        <div class="m-side"><img src="https://flagcdn.com/w40/au.png" width="24" height="18" alt=""><span class="nm">Australia</span></div>
+      </div>
+      <div class="m-venue">Levi's Stadium, Santa Clara</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Pagină neoficială, în scop de divertisment.<br>
+  <a href="https://semnatura.calificata.ro/">calificata.ro</a>
+</footer>
+
+</body>
+</html>

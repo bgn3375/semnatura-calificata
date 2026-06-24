@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/(.*)", "has": [{ "type": "host", "value": "romania.calificata.ro" }], "destination": "/romania.html" },
     { "source": "/termeni", "destination": "/termeni.html" },
     { "source": "/gdpr", "destination": "/gdpr.html" },
     { "source": "/(documente|setari|login|semneaza|multumim|plata|procesare|succes|verificare|telefon)", "destination": "/app.html" }
